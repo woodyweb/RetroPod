@@ -6,665 +6,622 @@
 <title>Mood Player</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
-
-html, body {
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{
   height:100%;
-  background: radial-gradient(ellipse at center, #2a2a2a 0%, #111 100%);
-  display:flex; align-items:center; justify-content:center;
-  font-family:'Noto Sans KR', sans-serif;
-  overflow:hidden;
-  user-select:none; -webkit-user-select:none;
-  touch-action:none;
+  background:radial-gradient(ellipse at center,#2a2a2a 0%,#111 100%);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Noto Sans KR',sans-serif;
+  overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:none;
 }
 
-/* ════════════════════════════
-   SCREENS
-════════════════════════════ */
-.screen {
-  position:fixed; inset:0;
-  display:flex; align-items:center; justify-content:center;
-  transition:opacity .45s ease, transform .45s ease;
-}
-.screen.hidden { opacity:0; pointer-events:none; transform:scale(.96); }
-
-/* ════════════════════════════
-   iPOD BODY
-════════════════════════════ */
-.ipod {
-  width: 240px;
-  background: linear-gradient(170deg, #fafaff 0%, #e8e8e8 45%, #d0d0ce 100%);
-  border-radius: 30px;
-  padding: 14px 14px 22px;
-  position: relative;
+/* ── iPOD BODY ── */
+.ipod{
+  width:240px;
+  background:linear-gradient(170deg,#fafaff 0%,#e8e8e8 45%,#d0d0ce 100%);
+  border-radius:30px;padding:14px 14px 22px;position:relative;
   box-shadow:
-    inset 0 2px 3px rgba(255,255,255,.9),
-    inset 0 -2px 3px rgba(0,0,0,.15),
-    0 25px 60px rgba(0,0,0,.6),
-    0 8px 20px rgba(0,0,0,.4),
-    0 2px 4px rgba(0,0,0,.3);
+    inset 0 2px 3px rgba(255,255,255,.9),inset 0 -2px 3px rgba(0,0,0,.15),
+    0 25px 60px rgba(0,0,0,.6),0 8px 20px rgba(0,0,0,.4),0 2px 4px rgba(0,0,0,.3);
 }
-
-/* plastic sheen */
-.ipod::before {
-  content:'';
-  position:absolute; top:0; left:0; right:0; height:55%;
+.ipod::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:55%;
   border-radius:30px 30px 60% 60%;
-  background:linear-gradient(180deg, rgba(255,255,255,.5) 0%, transparent 100%);
-  pointer-events:none; z-index:10;
+  background:linear-gradient(180deg,rgba(255,255,255,.5) 0%,transparent 100%);
+  pointer-events:none;z-index:10;
+}
+.ipod::after{
+  content:'';position:absolute;inset:0;border-radius:30px;
+  border:1px solid rgba(255,255,255,.6);pointer-events:none;z-index:11;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.1);
 }
 
-/* side chrome edge */
-.ipod::after {
-  content:'';
-  position:absolute; inset:0;
-  border-radius:30px;
-  border:1px solid rgba(255,255,255,.6);
-  pointer-events:none; z-index:11;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.1);
+/* ── LCD BEZEL ── */
+.screen-bezel{
+  background:#111;border-radius:8px;padding:2px;margin-bottom:14px;
+  box-shadow:inset 0 2px 6px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.3);
 }
-
-/* ════════════════════════════
-   LCD SCREEN
-════════════════════════════ */
-.screen-bezel {
-  background: #111;
-  border-radius: 8px;
-  padding: 2px;
-  margin-bottom: 14px;
-  box-shadow:
-    inset 0 2px 6px rgba(0,0,0,.8),
-    0 1px 0 rgba(255,255,255,.3);
-}
-
-.lcd {
-  width: 100%;
-  height: 162px;
-  border-radius: 6px;
-  overflow: hidden;
-  position: relative;
-  background: #b8d4b0;
-  /* LCD pixel grid effect */
+.lcd{
+  width:100%;height:162px;border-radius:6px;overflow:hidden;position:relative;
   background-image:
-    repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,.04) 1px, rgba(0,0,0,.04) 2px),
-    linear-gradient(180deg, #c0d8b8 0%, #a8c8a0 100%);
+    repeating-linear-gradient(0deg,transparent,transparent 1px,rgba(0,0,0,.04) 1px,rgba(0,0,0,.04) 2px),
+    linear-gradient(180deg,#c0d8b8 0%,#a8c8a0 100%);
+}
+.lcd::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:40%;
+  background:linear-gradient(180deg,rgba(255,255,255,.15) 0%,transparent 100%);
+  pointer-events:none;z-index:20;
 }
 
-/* slight LCD reflection */
-.lcd::after {
-  content:'';
-  position:absolute; top:0; left:0; right:0; height:40%;
-  background:linear-gradient(180deg, rgba(255,255,255,.15) 0%, transparent 100%);
+/* ── LCD HEADER ── */
+.lcd-header{
+  background:linear-gradient(180deg,#4466bb 0%,#2244aa 100%);
+  color:#fff;font-size:10.5px;font-weight:600;
+  padding:3px 8px;letter-spacing:.5px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;z-index:2;height:18px;
+}
+.lcd-header .h-title{flex:1;text-align:center}
+.lcd-header .h-icon{font-size:9px;opacity:.8;min-width:12px}
+
+/* ── LCD VIEWS ── */
+.lcd-view{position:absolute;top:18px;left:0;right:0;bottom:16px;overflow:hidden}
+.lcd-view.hidden{display:none}
+
+/* ── MENU VIEW ── */
+.lcd-menu{padding:1px 0}
+.lcd-row{
+  display:flex;align-items:center;padding:4px 7px;gap:6px;
+  font-size:11px;color:#182818;font-weight:400;line-height:1.2;
+}
+.lcd-row .r-icon{font-size:13px;width:16px;text-align:center;flex-shrink:0}
+.lcd-row .r-name{flex:1}
+.lcd-row .r-arr{font-size:10px;color:#6a8a6a;flex-shrink:0}
+.lcd-row.active{background:#2244aa;color:#fff;border-radius:2px}
+.lcd-row.active .r-arr{color:rgba(255,255,255,.7)}
+
+/* ── NOW PLAYING VIEW ── */
+.np-body{display:flex;gap:7px;padding:5px 7px 3px;height:90px;align-items:flex-start}
+.np-art{
+  width:54px;height:66px;flex-shrink:0;border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  box-shadow:inset 0 1px 3px rgba(0,0,0,.25),0 2px 8px rgba(0,0,0,.3);
+  transition:background .6s ease;
+}
+.np-art-lines{
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(-45deg,transparent,transparent 3px,rgba(0,0,0,.06) 3px,rgba(0,0,0,.06) 4px);
+}
+.np-art-shine{
+  position:absolute;top:0;left:0;right:0;height:45%;
+  background:linear-gradient(180deg,rgba(255,255,255,.28) 0%,transparent 100%);
   pointer-events:none;
 }
-
-/* ── header bar ── */
-.lcd-header {
-  background: linear-gradient(180deg, #4466bb 0%, #2244aa 100%);
-  color: #fff;
-  font-size: 10.5px;
-  font-weight: 600;
-  text-align: center;
-  padding: 3px 8px;
-  letter-spacing: .5px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.np-art-icon{position:relative;z-index:1;font-size:22px;line-height:1}
+.np-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;padding-top:2px}
+.np-title{
+  font-size:10px;font-weight:600;color:#182818;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;
 }
-.lcd-header .h-title { flex:1; text-align:center; }
-.lcd-header .h-icon  { font-size:9px; opacity:.8; }
+.np-artist{font-size:9px;color:#4a6a4a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.np-vol-row{display:flex;align-items:center;gap:3px;margin-top:5px}
+.vol-label{font-size:7.5px;color:#4a6a4a;font-family:monospace;flex-shrink:0}
+.vol-track{flex:1;height:4px;background:rgba(0,0,0,.12);border-radius:2px;overflow:hidden}
+.vol-fill{height:100%;background:#2244aa;border-radius:2px;transition:width .12s}
+.np-bars{display:flex;align-items:flex-end;gap:1px;height:11px;margin-top:5px}
+.np-bar{width:3px;background:#2244aa;border-radius:1px;animation:bar-bounce .7s ease infinite}
+.np-bar:nth-child(1){animation-delay:0s;height:6px}
+.np-bar:nth-child(2){animation-delay:.15s;height:10px}
+.np-bar:nth-child(3){animation-delay:.3s;height:4px}
+.np-bar:nth-child(4){animation-delay:.1s;height:8px}
+.np-bar.paused{animation:none;height:3px!important}
+@keyframes bar-bounce{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
 
-/* ── menu items ── */
-.lcd-menu {
-  padding: 1px 0;
+.np-prog-row{
+  display:flex;align-items:center;gap:4px;padding:0 7px 0;height:20px;
 }
+.prog-time{font-size:7.5px;color:#4a6a4a;font-family:monospace;flex-shrink:0;min-width:26px}
+.prog-time:last-child{text-align:right}
+.prog-track{flex:1;height:4px;background:rgba(0,0,0,.12);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:#2244aa;border-radius:2px;transition:width .6s linear;width:0%}
 
-.lcd-row {
-  display: flex;
-  align-items: center;
-  padding: 4px 7px;
-  gap: 6px;
-  font-size: 11px;
-  color: #182818;
-  font-weight: 400;
-  line-height: 1.2;
-  cursor: default;
-  transition: background .06s;
+/* ── ALBUMS VIEW ── */
+.albums-scene{
+  height:92px;position:relative;
+  display:flex;align-items:center;justify-content:center;
+  perspective:250px;overflow:visible;
 }
-.lcd-row .r-icon { font-size: 13px; width: 16px; text-align:center; flex-shrink:0; }
-.lcd-row .r-name { flex:1; }
-.lcd-row .r-sub  { font-size:9px; color:#4a6a4a; margin-left:auto; }
-.lcd-row .r-arr  { font-size:10px; color:#6a8a6a; flex-shrink:0; }
-
-.lcd-row.active {
-  background: #2244aa;
-  color: #fff;
-  border-radius: 2px;
+.album-card{
+  position:absolute;width:54px;height:66px;border-radius:3px;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .32s cubic-bezier(.4,0,.2,1),opacity .32s ease;
+  transform-style:preserve-3d;overflow:hidden;
+  box-shadow:2px 4px 12px rgba(0,0,0,.45);cursor:pointer;
 }
-.lcd-row.active .r-sub { color:rgba(255,255,255,.65); }
-.lcd-row.active .r-arr { color:rgba(255,255,255,.7); }
-
-/* ── status bar ── */
-.lcd-status {
-  position:absolute; bottom:0; left:0; right:0;
-  padding:2px 7px;
-  display:flex; justify-content:space-between; align-items:center;
-  font-size:8px; color:rgba(0,0,0,.4);
-  background:rgba(0,0,0,.06);
-  font-family:monospace;
+.album-card-lines{
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(-45deg,transparent,transparent 4px,rgba(0,0,0,.07) 4px,rgba(0,0,0,.07) 5px);
 }
-.batt { display:flex; align-items:center; gap:1px; }
-.batt-body {
-  width:16px; height:7px;
-  border:1px solid rgba(0,0,0,.35); border-radius:1px;
-  padding:1px; position:relative;
+.album-card-shine{
+  position:absolute;top:0;left:0;right:0;height:40%;
+  background:linear-gradient(180deg,rgba(255,255,255,.3) 0%,transparent 100%);pointer-events:none;
 }
-.batt-fill { width:68%; height:100%; background:#3a8a3a; border-radius:1px; }
-.batt-nub  { width:2px; height:3px; background:rgba(0,0,0,.3); border-radius:0 1px 1px 0; }
-
-/* ════════════════════════════
-   CLICK WHEEL AREA
-════════════════════════════ */
-.wheel-section {
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  position:relative;
+.album-icon{position:relative;z-index:1}
+.albums-name{
+  text-align:center;font-size:10.5px;font-weight:600;color:#182818;
+  padding:2px 8px;letter-spacing:.3px;height:20px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 
-/* The outer wheel ring (CSS) */
-.wheel-shell {
-  width: 210px;
-  height: 210px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 38% 32%,
-    #e0e0de 0%,
-    #c8c8c6 40%,
-    #b0b0ae 70%,
-    #a0a0a0 100%
-  );
+/* ── LCD STATUS ── */
+.lcd-status{
+  position:absolute;bottom:0;left:0;right:0;height:16px;
+  padding:2px 7px;display:flex;justify-content:space-between;align-items:center;
+  font-size:8px;color:rgba(0,0,0,.4);background:rgba(0,0,0,.06);
+  font-family:monospace;z-index:2;
+}
+.batt{display:flex;align-items:center;gap:1px}
+.batt-body{width:16px;height:7px;border:1px solid rgba(0,0,0,.35);border-radius:1px;padding:1px}
+.batt-fill{width:68%;height:100%;background:#3a8a3a;border-radius:1px}
+.batt-nub{width:2px;height:3px;background:rgba(0,0,0,.3);border-radius:0 1px 1px 0}
+
+/* ── CLICK WHEEL ── */
+.wheel-section{display:flex;align-items:center;justify-content:center}
+.wheel-shell{
+  width:210px;height:210px;border-radius:50%;
+  background:radial-gradient(circle at 38% 32%,#e0e0de 0%,#c8c8c6 40%,#b0b0ae 70%,#a0a0a0 100%);
   box-shadow:
-    inset 0 2px 4px rgba(255,255,255,.7),
-    inset 0 -2px 4px rgba(0,0,0,.2),
-    0 4px 14px rgba(0,0,0,.35),
-    0 2px 4px rgba(0,0,0,.2);
-  position:relative;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+    inset 0 2px 4px rgba(255,255,255,.7),inset 0 -2px 4px rgba(0,0,0,.2),
+    0 4px 14px rgba(0,0,0,.35),0 2px 4px rgba(0,0,0,.2);
+  position:relative;display:flex;align-items:center;justify-content:center;cursor:grab;
 }
-
-/* chrome outer rim */
-.wheel-shell::before {
-  content:'';
-  position:absolute; inset:-1px;
-  border-radius:50%;
-  background:linear-gradient(135deg, rgba(255,255,255,.5) 0%, transparent 50%, rgba(0,0,0,.1) 100%);
+.wheel-shell::before{
+  content:'';position:absolute;inset:-1px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(255,255,255,.5) 0%,transparent 50%,rgba(0,0,0,.1) 100%);
   pointer-events:none;
 }
-
-/* jQuery Knob canvas wrapper — covers the ring area */
-.knob-wrap {
-  position:absolute; inset:0;
-  border-radius:50%;
-  /* the canvas sits here, transparent center shows through */
-  display:flex; align-items:center; justify-content:center;
-  cursor:pointer;
-  z-index:2;
+.wheel-shell:active{cursor:grabbing}
+.knob-wrap{
+  position:absolute;inset:0;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;z-index:2;
 }
-.knob-wrap canvas {
-  /* make canvas non-blocking for center button */
-  pointer-events:none;
+.knob-wrap canvas{pointer-events:none}
+.wl{
+  position:absolute;font-weight:600;color:#888;letter-spacing:.5px;
+  pointer-events:none;z-index:3;text-transform:uppercase;
 }
-/* re-enable pointer on the outer ring area */
-.wheel-shell { cursor:grab; }
-.wheel-shell:active { cursor:grabbing; }
-
-/* Wheel labels */
-.wl {
-  position:absolute;
-  font-size:8.5px;
-  font-weight:600;
-  color:#888;
-  letter-spacing:.5px;
-  pointer-events:none;
-  z-index:3;
-  text-transform:uppercase;
-}
-.wl-top    { top:7px;   left:50%; transform:translateX(-50%); }
-.wl-left   { left:8px;  top:50%;  transform:translateY(-50%); font-size:13px; }
-.wl-right  { right:8px; top:50%;  transform:translateY(-50%); font-size:13px; }
-.wl-bottom { bottom:7px;left:50%; transform:translateX(-50%); font-size:12px; }
-
-/* ── Center Button ── */
-.center-btn {
-  position:absolute;
-  width:74px; height:74px;
-  border-radius:50%;
-  background: radial-gradient(circle at 38% 34%,
-    #f4f4f2 0%,
-    #dcdcda 55%,
-    #cacac8 100%
-  );
+.wl-top   {font-size:8.5px;top:7px;  left:50%;transform:translateX(-50%)}
+.wl-left  {font-size:13px; left:8px; top:50%; transform:translateY(-50%)}
+.wl-right {font-size:13px; right:8px;top:50%; transform:translateY(-50%)}
+.wl-bottom{font-size:12px; bottom:7px;left:50%;transform:translateX(-50%)}
+.center-btn{
+  position:absolute;width:74px;height:74px;border-radius:50%;
+  background:radial-gradient(circle at 38% 34%,#f4f4f2 0%,#dcdcda 55%,#cacac8 100%);
   box-shadow:
-    inset 0 1px 3px rgba(255,255,255,.8),
-    inset 0 -1px 3px rgba(0,0,0,.15),
-    0 3px 8px rgba(0,0,0,.25),
-    0 1px 3px rgba(0,0,0,.2);
-  cursor:pointer;
-  z-index:10;
-  transition:transform .1s, box-shadow .1s;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+    inset 0 1px 3px rgba(255,255,255,.8),inset 0 -1px 3px rgba(0,0,0,.15),
+    0 3px 8px rgba(0,0,0,.25),0 1px 3px rgba(0,0,0,.2);
+  cursor:pointer;z-index:10;transition:transform .1s,box-shadow .1s;
 }
-.center-btn:hover {
-  box-shadow:
-    inset 0 1px 3px rgba(255,255,255,.8),
-    inset 0 -1px 3px rgba(0,0,0,.15),
-    0 4px 10px rgba(0,0,0,.3),
-    0 1px 3px rgba(0,0,0,.2);
+.center-btn.pressed,.center-btn:active{
+  transform:scale(.94);box-shadow:inset 0 2px 5px rgba(0,0,0,.2),0 1px 3px rgba(0,0,0,.15);
 }
-.center-btn.pressed,
-.center-btn:active {
-  transform:scale(.94);
-  box-shadow:
-    inset 0 2px 5px rgba(0,0,0,.2),
-    0 1px 3px rgba(0,0,0,.15);
+.ipod-logo{text-align:center;margin-top:-8px;margin-bottom:6px;font-size:9px;letter-spacing:2.5px;color:#aaa}
+@keyframes ripple{from{transform:scale(.8);opacity:.5}to{transform:scale(1.15);opacity:0}}
+.ripple-ring{
+  position:absolute;inset:-6px;border-radius:50%;
+  border:2px solid rgba(100,160,255,.6);animation:ripple .4s ease-out forwards;pointer-events:none;
 }
-
-/* ── iPod logo area ── */
-.ipod-logo {
-  text-align:center;
-  margin-top: -8px;
-  margin-bottom: 6px;
-  font-size: 9px;
-  letter-spacing: 2.5px;
-  color: #aaa;
-  font-weight:300;
-}
-
-/* ════════════════════════════
-   PLAYER SCREEN
-════════════════════════════ */
-#player-screen {
-  background:#0c0c0c;
-  flex-direction:column;
-}
-.player-glow {
-  position:fixed; inset:0; z-index:0;
-  opacity:.12; filter:blur(90px);
-  transition:background 1.4s ease;
-  pointer-events:none;
-}
-.player-inner {
-  position:relative; z-index:1;
-  display:flex; flex-direction:column;
-  align-items:center; width:100%; max-width:360px;
-  padding:max(env(safe-area-inset-top,16px),16px) 24px 20px;
-  color:#f0ece4;
-}
-.topbar {
-  width:100%; display:flex; align-items:center;
-  justify-content:space-between; margin-bottom:18px;
-}
-.back-btn {
-  background:none; border:none; color:#5a5560;
-  font-family:'Noto Sans KR',sans-serif; font-size:12px;
-  cursor:pointer; letter-spacing:.5px; padding:6px 0;
-  transition:color .2s;
-}
-.back-btn:hover { color:#f0ece4; }
-.mood-badge {
-  font-size:10px; color:#5a5560; letter-spacing:2px;
-  font-style:italic;
-}
-.player-mood-title {
-  font-size:clamp(30px,9vw,48px); font-weight:300;
-  align-self:flex-start; margin-bottom:18px; line-height:1;
-  letter-spacing:-1px;
-}
-#yt-wrap {
-  width:100%; border-radius:14px; overflow:hidden;
-  margin-bottom:14px; background:#111; aspect-ratio:16/9;
-}
-#yt-wrap iframe { width:100%; height:100%; display:block; border:none; }
-.track-row {
-  width:100%; display:flex; align-items:center;
-  justify-content:space-between; margin-bottom:14px; gap:12px;
-}
-.track-text { flex:1; min-width:0; }
-.track-name {
-  font-size:14px; font-weight:500; color:#f0ece4;
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-}
-.track-artist {
-  font-size:11px; color:#5a5560; margin-top:3px;
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-}
-.save-btns { display:flex; gap:7px; flex-shrink:0; }
-.save-btn {
-  display:flex; align-items:center; gap:4px;
-  padding:6px 10px; border-radius:20px;
-  border:1px solid rgba(255,255,255,.1);
-  background:rgba(255,255,255,.04);
-  text-decoration:none; color:#5a5560;
-  font-size:10.5px;
-  transition:color .2s, border-color .2s; white-space:nowrap;
-}
-.save-btn:hover { color:#f0ece4; border-color:rgba(255,255,255,.3); }
-.save-btn svg { width:11px; height:11px; flex-shrink:0; }
-.p-controls {
-  width:100%; display:flex; align-items:center;
-  justify-content:center; gap:30px; margin-bottom:18px;
-}
-.p-ctrl {
-  background:none; border:none; color:#5a5560;
-  cursor:pointer; padding:8px; font-size:20px;
-  transition:color .2s, transform .15s;
-}
-.p-ctrl:hover { color:#f0ece4; transform:scale(1.1); }
-.p-play {
-  width:55px; height:55px; border-radius:50%;
-  background:#f0ece4; border:none; cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-  transition:transform .15s;
-  box-shadow:0 0 28px rgba(240,236,228,.18);
-}
-.p-play svg { width:20px; height:20px; fill:#0c0c0c; }
-.p-playlist {
-  display:inline-flex; align-items:center; gap:6px;
-  font-size:11px; color:#5a5560; text-decoration:none;
-  border:1px solid rgba(255,255,255,.1); border-radius:20px;
-  padding:7px 16px; transition:color .2s, border-color .2s; letter-spacing:.5px;
-}
-.p-playlist:hover { color:#f0ece4; border-color:rgba(255,255,255,.3); }
-.status-msg { font-size:10px; color:#5a5560; text-align:center; min-height:14px; margin-bottom:6px; }
-
-/* touch ripple on center button */
-@keyframes ripple {
-  from { transform:scale(0.8); opacity:.5; }
-  to   { transform:scale(1.15); opacity:0; }
-}
-.ripple-ring {
-  position:absolute; inset:-6px;
-  border-radius:50%; border:2px solid rgba(100,160,255,.6);
-  animation:ripple .4s ease-out forwards;
-  pointer-events:none;
-}
-
-body::after {
-  content:''; position:fixed; inset:0; pointer-events:none;
-  opacity:.022; z-index:9999;
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;opacity:.022;z-index:9999;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 </style>
 </head>
 <body>
 
-<!-- ══════════════ iPOD ══════════════ -->
-<div class="screen" id="ipod-screen">
-  <div class="ipod">
+<div class="ipod">
+  <div class="screen-bezel">
+    <div class="lcd">
+      <div class="lcd-header">
+        <span class="h-icon" id="hLeft">&nbsp;</span>
+        <span class="h-title" id="hTitle">Now Playing</span>
+        <span class="h-icon" id="hRight">▶</span>
+      </div>
 
-    <!-- Screen -->
-    <div class="screen-bezel">
-      <div class="lcd" id="lcd">
-        <div class="lcd-header">
-          <span class="h-icon">&nbsp;</span>
-          <span class="h-title">Mood select</span>
-          <span class="h-icon">▶</span>
-        </div>
-        <div class="lcd-menu" id="lcdMenu"></div>
-        <div class="lcd-status">
-          <span id="lcdClock">--:--</span>
-          <div class="batt">
-            <div class="batt-body"><div class="batt-fill"></div></div>
-            <div class="batt-nub"></div>
+      <!-- NOW PLAYING (default — loads on NFC tap) -->
+      <div class="lcd-view" id="view-nowplaying">
+        <div class="np-body">
+          <div class="np-art" id="npArt">
+            <div class="np-art-lines"></div>
+            <div class="np-art-shine"></div>
+            <span class="np-art-icon" id="npIcon">♪</span>
+          </div>
+          <div class="np-info">
+            <div class="np-title" id="npTitle">Tap ▶ to play</div>
+            <div class="np-artist" id="npArtist">Calm Mood</div>
+            <div class="np-vol-row">
+              <span class="vol-label">vol</span>
+              <div class="vol-track"><div class="vol-fill" id="volFill" style="width:70%"></div></div>
+            </div>
+            <div class="np-bars" id="npBars">
+              <div class="np-bar paused"></div>
+              <div class="np-bar paused"></div>
+              <div class="np-bar paused"></div>
+              <div class="np-bar paused"></div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- iPod wordmark -->
-    <div class="ipod-logo">&nbsp;</div>
-
-    <!-- Wheel -->
-    <div class="wheel-section">
-      <div class="wheel-shell" id="wheelShell">
-
-        <!-- jQuery Knob (infinite scroll detection) -->
-        <div class="knob-wrap" id="knobWrap">
-          <input class="ipod-knob" type="text" value="0">
+        <div class="np-prog-row">
+          <span class="prog-time" id="npCur">0:00</span>
+          <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+          <span class="prog-time" id="npRem">-0:00</span>
         </div>
+      </div>
 
-        <!-- Labels -->
-        <span class="wl wl-top">MENU</span>
-        <span class="wl wl-left">◄◄</span>
-        <span class="wl wl-right">►►</span>
-        <span class="wl wl-bottom">▶‖</span>
+      <!-- MENU -->
 
-        <!-- Center button -->
-        <div class="center-btn" id="centerBtn"></div>
+      <!-- TRACK LIST CAROUSEL -->
+      <div class="lcd-view hidden" id="view-tracklist">
+        <div class="albums-scene" id="albumsScene"></div>
+        <div class="albums-name" id="albumsName">Track 1</div>
+      </div>
+
+      <div class="lcd-status">
+        <span id="lcdClock">--:--</span>
+        <div class="batt"><div class="batt-body"><div class="batt-fill"></div></div><div class="batt-nub"></div></div>
       </div>
     </div>
+  </div>
 
+  <div class="ipod-logo">&nbsp;</div>
+
+  <div class="wheel-section">
+    <div class="wheel-shell" id="wheelShell">
+      <div class="knob-wrap" id="knobWrap">
+        <input class="ipod-knob" type="text" value="0">
+      </div>
+      <span class="wl wl-top">MENU</span>
+      <span class="wl wl-left">◄◄</span>
+      <span class="wl wl-right">►►</span>
+      <span class="wl wl-bottom">► ‖</span>
+      <div class="center-btn" id="centerBtn"></div>
+    </div>
   </div>
 </div>
 
-<!-- ══════════════ PLAYER ══════════════ -->
-<div class="screen hidden" id="player-screen">
-  <div class="player-glow" id="glow"></div>
-  <div class="player-inner">
-    <div class="topbar">
-      <button class="back-btn" onclick="goBack()">← mood select</button>
-      <span class="mood-badge" id="moodBadge">calm</span>
-    </div>
-    <h2 class="player-mood-title" id="moodTitle">고요</h2>
-    <div id="yt-wrap"><div id="yt-player"></div></div>
-    <p class="status-msg" id="statusMsg"></p>
-    <div class="track-row">
-      <div class="track-text">
-        <p class="track-name"   id="tName">재생 준비 중...</p>
-        <p class="track-artist" id="tArtist">잠시만 기다려 주세요</p>
-      </div>
-      <div class="save-btns">
-        <a class="save-btn" id="btnYT" href="#" target="_blank">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22.54 6.42A2.78 2.78 0 0020.7 4.6C19.07 4 12 4 12 4s-7.07 0-8.7.6A2.78 2.78 0 001.46 6.42 29.94 29.94 0 001 12a29.94 29.94 0 00.46 5.58A2.78 2.78 0 003.3 19.4C4.93 20 12 20 12 20s7.07 0 8.7-.6a2.78 2.78 0 001.84-1.82A29.94 29.94 0 0023 12a29.94 29.94 0 00-.46-5.58z"/>
-            <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/>
-          </svg>YouTube
-        </a>
-        <a class="save-btn" id="btnSP" href="#" target="_blank">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.622.622 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.622.622 0 01-.277-1.215c3.809-.87 7.077-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.722a.779.779 0 01-1.072.257C14.15 12.334 10.9 11.862 7 12.9a.779.779 0 01-.945-.522.78.78 0 01.522-.946c4.382-1.16 8.006-.578 10.973 1.198a.779.779 0 01.259 1.072zm.105-2.835C15.155 9.086 10.398 8.91 7.635 9.759a.935.935 0 11-.543-1.79c3.17-.964 8.445-.778 11.775 1.17a.936.936 0 01-.953 1.728z"/>
-          </svg>Spotify
-        </a>
-      </div>
-    </div>
-    <div class="p-controls">
-      <button class="p-ctrl" onclick="prevTrack()">◄◄</button>
-      <button class="p-play" id="playBtn" onclick="togglePlay()">
-        <svg id="iconPause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
-        <svg id="iconPlay"  viewBox="0 0 24 24" style="display:none"><polygon points="5,3 19,12 5,21"/></svg>
-      </button>
-      <button class="p-ctrl" onclick="nextTrack()">►►</button>
-    </div>
-    <a class="p-playlist" id="playlistLink" href="#" target="_blank">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
-        <line x1="8" y1="18" x2="21" y2="18"/>
-        <circle cx="3" cy="6" r="1.5"/><circle cx="3" cy="12" r="1.5"/><circle cx="3" cy="18" r="1.5"/>
-      </svg>
-      Click View all to see all the playlists
-    </a>
-  </div>
+<!-- YouTube off-screen (must be in real DOM for API) -->
+<div style="position:fixed;bottom:-240px;right:-440px;width:320px;height:200px;overflow:hidden;">
+  <div id="yt-player"></div>
 </div>
 
-<!-- jQuery + jQuery Knob (인라인) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
-// ── jQuery Knob (minified, inlined from zip) ─────────────────
-(function(e){if(typeof define==="function"&&define.amd){define(["jquery"],e)}else{e(jQuery)}})(function(e){"use strict";var t={},n=Math.max,r=Math.min;t.c={};t.c.d=e(document);t.c.t=function(e){return e.originalEvent.touches.length-1};t.o=function(){var n=this;this.o=null;this.$=null;this.i=null;this.g=null;this.v=null;this.cv=null;this.x=0;this.y=0;this.w=0;this.h=0;this.$c=null;this.c=null;this.t=0;this.isInit=false;this.fgColor=null;this.pColor=null;this.dH=null;this.cH=null;this.eH=null;this.rH=null;this.scale=1;this.relative=false;this.relativeWidth=false;this.relativeHeight=false;this.$div=null;this.run=function(){var t=function(e,t){var r;for(r in t){n.o[r]=t[r]}n._carve().init();n._configure()._draw()};if(this.$.data("kontroled"))return;this.$.data("kontroled",true);this.extend();this.o=e.extend({min:this.$.data("min")!==undefined?this.$.data("min"):0,max:this.$.data("max")!==undefined?this.$.data("max"):100,stopper:true,readOnly:this.$.data("readonly")||this.$.attr("readonly")==="readonly",cursor:this.$.data("cursor")===true&&30||this.$.data("cursor")||0,thickness:this.$.data("thickness")&&Math.max(Math.min(this.$.data("thickness"),1),.01)||.35,lineCap:this.$.data("linecap")||"butt",width:this.$.data("width")||200,height:this.$.data("height")||200,displayInput:this.$.data("displayinput")==null||this.$.data("displayinput"),displayPrevious:this.$.data("displayprevious"),fgColor:this.$.data("fgcolor")||"#87CEEB",inputColor:this.$.data("inputcolor"),font:this.$.data("font")||"Arial",fontWeight:this.$.data("font-weight")||"bold",inline:false,step:this.$.data("step")||1,rotation:this.$.data("rotation"),draw:null,change:null,cancel:null,release:null,format:function(e){return e},parse:function(e){return parseFloat(e)}},this.o);this.o.flip=this.o.rotation==="anticlockwise"||this.o.rotation==="acw";if(!this.o.inputColor){this.o.inputColor=this.o.fgColor}if(this.$.is("fieldset")){this.v={};this.i=this.$.find("input");this.i.each(function(t){var r=e(this);n.i[t]=r;n.v[t]=n.o.parse(r.val());r.bind("change blur",function(){var e={};e[t]=r.val();n.val(n._validate(e))})});this.$.find("legend").remove()}else{this.i=this.$;this.v=this.o.parse(this.$.val());this.v===""&&(this.v=this.o.min);this.$.bind("change blur",function(){n.val(n._validate(n.o.parse(n.$.val())))})}!this.o.displayInput&&this.$.hide();this.$c=e(document.createElement("canvas")).attr({width:this.o.width,height:this.o.height});this.$div=e('<div style="'+(this.o.inline?"display:inline;":"")+"width:"+this.o.width+"px;height:"+this.o.height+"px;"+'"></div>');this.$.wrap(this.$div).before(this.$c);this.$div=this.$.parent();if(typeof G_vmlCanvasManager!=="undefined"){G_vmlCanvasManager.initElement(this.$c[0])}this.c=this.$c[0].getContext?this.$c[0].getContext("2d"):null;if(!this.c){throw{name:"CanvasNotSupportedException",message:"Canvas not supported. Please use excanvas on IE8.0.",toString:function(){return this.name+": "+this.message}}}this.scale=(window.devicePixelRatio||1)/(this.c.webkitBackingStorePixelRatio||this.c.mozBackingStorePixelRatio||this.c.msBackingStorePixelRatio||this.c.oBackingStorePixelRatio||this.c.backingStorePixelRatio||1);this.relativeWidth=this.o.width%1!==0&&this.o.width.indexOf("%");this.relativeHeight=this.o.height%1!==0&&this.o.height.indexOf("%");this.relative=this.relativeWidth||this.relativeHeight;this._carve();if(this.v instanceof Object){this.cv={};this.copy(this.v,this.cv)}else{this.cv=this.v}this.$.bind("configure",t).parent().bind("configure",t);this._listen()._configure()._xy().init();this.isInit=true;this.$.val(this.o.format(this.v));this._draw();return this};this._carve=function(){if(this.relative){var e=this.relativeWidth?this.$div.parent().width()*parseInt(this.o.width)/100:this.$div.parent().width(),t=this.relativeHeight?this.$div.parent().height()*parseInt(this.o.height)/100:this.$div.parent().height();this.w=this.h=Math.min(e,t)}else{this.w=this.o.width;this.h=this.o.height}this.$div.css({width:this.w+"px",height:this.h+"px"});this.$c.attr({width:this.w,height:this.h});if(this.scale!==1){this.$c[0].width=this.$c[0].width*this.scale;this.$c[0].height=this.$c[0].height*this.scale;this.$c.width(this.w);this.$c.height(this.h)}return this};this._draw=function(){var e=true;n.g=n.c;n.clear();n.dH&&(e=n.dH());e!==false&&n.draw()};this._touch=function(e){var r=function(e){var t=n.xy2val(e.originalEvent.touches[n.t].pageX,e.originalEvent.touches[n.t].pageY);if(t==n.cv)return;if(n.cH&&n.cH(t)===false)return;n.change(n._validate(t));n._draw()};this.t=t.c.t(e);r(e);t.c.d.bind("touchmove.k",r).bind("touchend.k",function(){t.c.d.unbind("touchmove.k touchend.k");n.val(n.cv)});return this};this._mouse=function(e){var r=function(e){var t=n.xy2val(e.pageX,e.pageY);if(t==n.cv)return;if(n.cH&&n.cH(t)===false)return;n.change(n._validate(t));n._draw()};r(e);t.c.d.bind("mousemove.k",r).bind("keyup.k",function(e){if(e.keyCode===27){t.c.d.unbind("mouseup.k mousemove.k keyup.k");if(n.eH&&n.eH()===false)return;n.cancel()}}).bind("mouseup.k",function(e){t.c.d.unbind("mousemove.k mouseup.k keyup.k");n.val(n.cv)});return this};this._xy=function(){var e=this.$c.offset();this.x=e.left;this.y=e.top;return this};this._listen=function(){if(!this.o.readOnly){this.$c.bind("mousedown",function(e){e.preventDefault();n._xy()._mouse(e)}).bind("touchstart",function(e){e.preventDefault();n._xy()._touch(e)});this.listen()}else{this.$.attr("readonly","readonly")}if(this.relative){e(window).resize(function(){n._carve().init();n._draw()})}return this};this._configure=function(){if(this.o.draw)this.dH=this.o.draw;if(this.o.change)this.cH=this.o.change;if(this.o.cancel)this.eH=this.o.cancel;if(this.o.release)this.rH=this.o.release;if(this.o.displayPrevious){this.pColor=this.h2rgba(this.o.fgColor,"0.4");this.fgColor=this.h2rgba(this.o.fgColor,"0.6")}else{this.fgColor=this.o.fgColor}return this};this._clear=function(){this.$c[0].width=this.$c[0].width};this._validate=function(e){var t=~~((e<0?-.5:.5)+e/this.o.step)*this.o.step;return Math.round(t*100)/100};this.listen=function(){};this.extend=function(){};this.init=function(){};this.change=function(e){};this.val=function(e){};this.xy2val=function(e,t){};this.draw=function(){};this.clear=function(){this._clear()};this.h2rgba=function(e,t){var n;e=e.substring(1,7);n=[parseInt(e.substring(0,2),16),parseInt(e.substring(2,4),16),parseInt(e.substring(4,6),16)];return"rgba("+n[0]+","+n[1]+","+n[2]+","+t+")"};this.copy=function(e,t){for(var n in e){t[n]=e[n]}}};t.Dial=function(){t.o.call(this);this.startAngle=null;this.xy=null;this.radius=null;this.lineWidth=null;this.cursorExt=null;this.w2=null;this.PI2=2*Math.PI;this.extend=function(){this.o=e.extend({bgColor:this.$.data("bgcolor")||"#EEEEEE",angleOffset:this.$.data("angleoffset")||0,angleArc:this.$.data("anglearc")||360,inline:true},this.o)};this.val=function(e,t){if(null!=e){e=this.o.parse(e);if(t!==false&&e!=this.v&&this.rH&&this.rH(e)===false){return}this.cv=this.o.stopper?n(r(e,this.o.max),this.o.min):e;this.v=this.cv;this.$.val(this.o.format(this.v));this._draw()}else{return this.v}};this.xy2val=function(e,t){var i,s;i=Math.atan2(e-(this.x+this.w2),-(t-this.y-this.w2))-this.angleOffset;if(this.o.flip){i=this.angleArc-i-this.PI2}if(this.angleArc!=this.PI2&&i<0&&i>-.5){i=0}else if(i<0){i+=this.PI2}s=i*(this.o.max-this.o.min)/this.angleArc+this.o.min;this.o.stopper&&(s=n(r(s,this.o.max),this.o.min));return s};this.listen=function(){var t=this,i,s,o=function(e){e.preventDefault();var o=e.originalEvent,u=o.detail||o.wheelDeltaX,a=o.detail||o.wheelDeltaY,f=t._validate(t.o.parse(t.$.val()))+(u>0||a>0?t.o.step:u<0||a<0?-t.o.step:0);f=n(r(f,t.o.max),t.o.min);t.val(f,false);if(t.rH){clearTimeout(i);i=setTimeout(function(){t.rH(f);i=null},100);if(!s){s=setTimeout(function(){if(i)t.rH(f);s=null},200)}}},u,a,f=1,l={37:-t.o.step,38:t.o.step,39:t.o.step,40:-t.o.step};this.$.bind("keydown",function(i){var s=i.keyCode;if(s>=96&&s<=105){s=i.keyCode=s-48}u=parseInt(String.fromCharCode(s));if(isNaN(u)){s!==13&&s!==8&&s!==9&&s!==189&&(s!==190||t.$.val().match(/\./))&&i.preventDefault();if(e.inArray(s,[37,38,39,40])>-1){i.preventDefault();var o=t.o.parse(t.$.val())+l[s]*f;t.o.stopper&&(o=n(r(o,t.o.max),t.o.min));t.change(t._validate(o));t._draw();a=window.setTimeout(function(){f*=2},30)}}}).bind("keyup",function(e){if(isNaN(u)){if(a){window.clearTimeout(a);a=null;f=1;t.val(t.$.val())}}else{t.$.val()>t.o.max&&t.$.val(t.o.max)||t.$.val()<t.o.min&&t.$.val(t.o.min)}});this.$c.bind("mousewheel DOMMouseScroll",o);this.$.bind("mousewheel DOMMouseScroll",o)};this.init=function(){if(this.v<this.o.min||this.v>this.o.max){this.v=this.o.min}this.$.val(this.v);this.w2=this.w/2;this.cursorExt=this.o.cursor/100;this.xy=this.w2*this.scale;this.lineWidth=this.xy*this.o.thickness;this.lineCap=this.o.lineCap;this.radius=this.xy-this.lineWidth/2;this.o.angleOffset&&(this.o.angleOffset=isNaN(this.o.angleOffset)?0:this.o.angleOffset);this.o.angleArc&&(this.o.angleArc=isNaN(this.o.angleArc)?this.PI2:this.o.angleArc);this.angleOffset=this.o.angleOffset*Math.PI/180;this.angleArc=this.o.angleArc*Math.PI/180;this.startAngle=1.5*Math.PI+this.angleOffset;this.endAngle=1.5*Math.PI+this.angleOffset+this.angleArc;var e=n(String(Math.abs(this.o.max)).length,String(Math.abs(this.o.min)).length,2)+2;this.o.displayInput&&this.i.css({width:(this.w/2+4>>0)+"px",height:(this.w/3>>0)+"px",position:"absolute","vertical-align":"middle","margin-top":(this.w/3>>0)+"px","margin-left":"-"+(this.w*3/4+2>>0)+"px",border:0,background:"none",font:this.o.fontWeight+" "+(this.w/e>>0)+"px "+this.o.font,"text-align":"center",color:this.o.inputColor||this.o.fgColor,padding:"0px","-webkit-appearance":"none"})||this.i.css({width:"0px",visibility:"hidden"})};this.change=function(e){this.cv=e;this.$.val(this.o.format(e))};this.angle=function(e){return(e-this.o.min)*this.angleArc/(this.o.max-this.o.min)};this.arc=function(e){var t,n;e=this.angle(e);if(this.o.flip){t=this.endAngle+1e-5;n=t-e-1e-5}else{t=this.startAngle-1e-5;n=t+e+1e-5}this.o.cursor&&(t=n-this.cursorExt)&&(n=n+this.cursorExt);return{s:t,e:n,d:this.o.flip&&!this.o.cursor}};this.draw=function(){var e=this.g,t=this.arc(this.cv),n,r=1;e.lineWidth=this.lineWidth;e.lineCap=this.lineCap;if(this.o.bgColor!=="none"){e.beginPath();e.strokeStyle=this.o.bgColor;e.arc(this.xy,this.xy,this.radius,this.endAngle-1e-5,this.startAngle+1e-5,true);e.stroke()}if(this.o.displayPrevious){n=this.arc(this.v);e.beginPath();e.strokeStyle=this.pColor;e.arc(this.xy,this.xy,this.radius,n.s,n.e,n.d);e.stroke();r=this.cv==this.v}e.beginPath();e.strokeStyle=r?this.o.fgColor:this.fgColor;e.arc(this.xy,this.xy,this.radius,t.s,t.e,t.d);e.stroke()};this.cancel=function(){this.val(this.v)}};e.fn.dial=e.fn.knob=function(n){return this.each(function(){var r=new t.Dial;r.o=n;r.$=e(this);r.run()}).parent()}});
+/* ── jQuery Knob inlined ── */
+(function(e){if(typeof define==="function"&&define.amd){define(["jquery"],e)}else{e(jQuery)}})(function(e){"use strict";var t={},n=Math.max,r=Math.min;t.c={};t.c.d=e(document);t.c.t=function(e){return e.originalEvent.touches.length-1};t.o=function(){var n=this;this.o=null;this.$=null;this.i=null;this.g=null;this.v=null;this.cv=null;this.x=0;this.y=0;this.w=0;this.h=0;this.$c=null;this.c=null;this.t=0;this.isInit=false;this.fgColor=null;this.pColor=null;this.dH=null;this.cH=null;this.eH=null;this.rH=null;this.scale=1;this.relative=false;this.relativeWidth=false;this.relativeHeight=false;this.$div=null;this.run=function(){var t=function(e,t){var r;for(r in t){n.o[r]=t[r]}n._carve().init();n._configure()._draw()};if(this.$.data("kontroled"))return;this.$.data("kontroled",true);this.extend();this.o=e.extend({min:this.$.data("min")!==undefined?this.$.data("min"):0,max:this.$.data("max")!==undefined?this.$.data("max"):100,stopper:true,readOnly:this.$.data("readonly")||this.$.attr("readonly")==="readonly",cursor:this.$.data("cursor")===true&&30||this.$.data("cursor")||0,thickness:this.$.data("thickness")&&Math.max(Math.min(this.$.data("thickness"),1),.01)||.35,lineCap:this.$.data("linecap")||"butt",width:this.$.data("width")||200,height:this.$.data("height")||200,displayInput:this.$.data("displayinput")==null||this.$.data("displayinput"),displayPrevious:this.$.data("displayprevious"),fgColor:this.$.data("fgcolor")||"#87CEEB",inputColor:this.$.data("inputcolor"),font:this.$.data("font")||"Arial",fontWeight:this.$.data("font-weight")||"bold",inline:false,step:this.$.data("step")||1,rotation:this.$.data("rotation"),draw:null,change:null,cancel:null,release:null,format:function(e){return e},parse:function(e){return parseFloat(e)}},this.o);this.o.flip=this.o.rotation==="anticlockwise"||this.o.rotation==="acw";if(!this.o.inputColor){this.o.inputColor=this.o.fgColor}if(this.$.is("fieldset")){this.v={};this.i=this.$.find("input");this.i.each(function(t){var r=e(this);n.i[t]=r;n.v[t]=n.o.parse(r.val());r.bind("change blur",function(){var e={};e[t]=r.val();n.val(n._validate(e))})});this.$.find("legend").remove()}else{this.i=this.$;this.v=this.o.parse(this.$.val());this.v===""&&(this.v=this.o.min);this.$.bind("change blur",function(){n.val(n._validate(n.o.parse(n.$.val())))})}!this.o.displayInput&&this.$.hide();this.$c=e(document.createElement("canvas")).attr({width:this.o.width,height:this.o.height});this.$div=e('<div style="'+(this.o.inline?"display:inline;":"")+"width:"+this.o.width+"px;height:"+this.o.height+"px;"+'"></div>');this.$.wrap(this.$div).before(this.$c);this.$div=this.$.parent();if(typeof G_vmlCanvasManager!=="undefined"){G_vmlCanvasManager.initElement(this.$c[0])}this.c=this.$c[0].getContext?this.$c[0].getContext("2d"):null;if(!this.c){throw{name:"CanvasNotSupportedException",message:"Canvas not supported.",toString:function(){return this.name+": "+this.message}}}this.scale=(window.devicePixelRatio||1)/(this.c.webkitBackingStorePixelRatio||this.c.mozBackingStorePixelRatio||this.c.msBackingStorePixelRatio||this.c.oBackingStorePixelRatio||this.c.backingStorePixelRatio||1);this.relativeWidth=this.o.width%1!==0&&this.o.width.indexOf("%");this.relativeHeight=this.o.height%1!==0&&this.o.height.indexOf("%");this.relative=this.relativeWidth||this.relativeHeight;this._carve();if(this.v instanceof Object){this.cv={};this.copy(this.v,this.cv)}else{this.cv=this.v}this.$.bind("configure",t).parent().bind("configure",t);this._listen()._configure()._xy().init();this.isInit=true;this.$.val(this.o.format(this.v));this._draw();return this};this._carve=function(){if(this.relative){var e=this.relativeWidth?this.$div.parent().width()*parseInt(this.o.width)/100:this.$div.parent().width(),t=this.relativeHeight?this.$div.parent().height()*parseInt(this.o.height)/100:this.$div.parent().height();this.w=this.h=Math.min(e,t)}else{this.w=this.o.width;this.h=this.o.height}this.$div.css({width:this.w+"px",height:this.h+"px"});this.$c.attr({width:this.w,height:this.h});if(this.scale!==1){this.$c[0].width=this.$c[0].width*this.scale;this.$c[0].height=this.$c[0].height*this.scale;this.$c.width(this.w);this.$c.height(this.h)}return this};this._draw=function(){var e=true;n.g=n.c;n.clear();n.dH&&(e=n.dH());e!==false&&n.draw()};this._touch=function(e){var r=function(e){var t=n.xy2val(e.originalEvent.touches[n.t].pageX,e.originalEvent.touches[n.t].pageY);if(t==n.cv)return;if(n.cH&&n.cH(t)===false)return;n.change(n._validate(t));n._draw()};this.t=t.c.t(e);r(e);t.c.d.bind("touchmove.k",r).bind("touchend.k",function(){t.c.d.unbind("touchmove.k touchend.k");n.val(n.cv)});return this};this._mouse=function(e){var r=function(e){var t=n.xy2val(e.pageX,e.pageY);if(t==n.cv)return;if(n.cH&&n.cH(t)===false)return;n.change(n._validate(t));n._draw()};r(e);t.c.d.bind("mousemove.k",r).bind("keyup.k",function(e){if(e.keyCode===27){t.c.d.unbind("mouseup.k mousemove.k keyup.k");if(n.eH&&n.eH()===false)return;n.cancel()}}).bind("mouseup.k",function(e){t.c.d.unbind("mousemove.k mouseup.k keyup.k");n.val(n.cv)});return this};this._xy=function(){var e=this.$c.offset();this.x=e.left;this.y=e.top;return this};this._listen=function(){if(!this.o.readOnly){this.$c.bind("mousedown",function(e){e.preventDefault();n._xy()._mouse(e)}).bind("touchstart",function(e){e.preventDefault();n._xy()._touch(e)});this.listen()}else{this.$.attr("readonly","readonly")}if(this.relative){e(window).resize(function(){n._carve().init();n._draw()})}return this};this._configure=function(){if(this.o.draw)this.dH=this.o.draw;if(this.o.change)this.cH=this.o.change;if(this.o.cancel)this.eH=this.o.cancel;if(this.o.release)this.rH=this.o.release;if(this.o.displayPrevious){this.pColor=this.h2rgba(this.o.fgColor,"0.4");this.fgColor=this.h2rgba(this.o.fgColor,"0.6")}else{this.fgColor=this.o.fgColor}return this};this._clear=function(){this.$c[0].width=this.$c[0].width};this._validate=function(e){var t=~~((e<0?-.5:.5)+e/this.o.step)*this.o.step;return Math.round(t*100)/100};this.listen=function(){};this.extend=function(){};this.init=function(){};this.change=function(e){};this.val=function(e){};this.xy2val=function(e,t){};this.draw=function(){};this.clear=function(){this._clear()};this.h2rgba=function(e,t){var n;e=e.substring(1,7);n=[parseInt(e.substring(0,2),16),parseInt(e.substring(2,4),16),parseInt(e.substring(4,6),16)];return"rgba("+n[0]+","+n[1]+","+n[2]+","+t+")"};this.copy=function(e,t){for(var n in e){t[n]=e[n]}}};t.Dial=function(){t.o.call(this);this.startAngle=null;this.xy=null;this.radius=null;this.lineWidth=null;this.cursorExt=null;this.w2=null;this.PI2=2*Math.PI;this.extend=function(){this.o=e.extend({bgColor:this.$.data("bgcolor")||"#EEEEEE",angleOffset:this.$.data("angleoffset")||0,angleArc:this.$.data("anglearc")||360,inline:true},this.o)};this.val=function(e,t){if(null!=e){e=this.o.parse(e);if(t!==false&&e!=this.v&&this.rH&&this.rH(e)===false){return}this.cv=this.o.stopper?n(r(e,this.o.max),this.o.min):e;this.v=this.cv;this.$.val(this.o.format(this.v));this._draw()}else{return this.v}};this.xy2val=function(e,t){var i,s;i=Math.atan2(e-(this.x+this.w2),-(t-this.y-this.w2))-this.angleOffset;if(this.o.flip){i=this.angleArc-i-this.PI2}if(this.angleArc!=this.PI2&&i<0&&i>-.5){i=0}else if(i<0){i+=this.PI2}s=i*(this.o.max-this.o.min)/this.angleArc+this.o.min;this.o.stopper&&(s=n(r(s,this.o.max),this.o.min));return s};this.listen=function(){var t=this,i,s,o=function(e){e.preventDefault();var o=e.originalEvent,u=o.detail||o.wheelDeltaX,a=o.detail||o.wheelDeltaY,f=t._validate(t.o.parse(t.$.val()))+(u>0||a>0?t.o.step:u<0||a<0?-t.o.step:0);f=n(r(f,t.o.max),t.o.min);t.val(f,false);if(t.rH){clearTimeout(i);i=setTimeout(function(){t.rH(f);i=null},100);if(!s){s=setTimeout(function(){if(i)t.rH(f);s=null},200)}}},u,a,f=1,l={37:-t.o.step,38:t.o.step,39:t.o.step,40:-t.o.step};this.$.bind("keydown",function(i){var s=i.keyCode;if(s>=96&&s<=105){s=i.keyCode=s-48}u=parseInt(String.fromCharCode(s));if(isNaN(u)){s!==13&&s!==8&&s!==9&&s!==189&&(s!==190||t.$.val().match(/\./))&&i.preventDefault();if(e.inArray(s,[37,38,39,40])>-1){i.preventDefault();var o=t.o.parse(t.$.val())+l[s]*f;t.o.stopper&&(o=n(r(o,t.o.max),t.o.min));t.change(t._validate(o));t._draw();a=window.setTimeout(function(){f*=2},30)}}}).bind("keyup",function(e){if(isNaN(u)){if(a){window.clearTimeout(a);a=null;f=1;t.val(t.$.val())}}else{t.$.val()>t.o.max&&t.$.val(t.o.max)||t.$.val()<t.o.min&&t.$.val(t.o.min)}});this.$c.bind("mousewheel DOMMouseScroll",o);this.$.bind("mousewheel DOMMouseScroll",o)};this.init=function(){if(this.v<this.o.min||this.v>this.o.max){this.v=this.o.min}this.$.val(this.v);this.w2=this.w/2;this.cursorExt=this.o.cursor/100;this.xy=this.w2*this.scale;this.lineWidth=this.xy*this.o.thickness;this.lineCap=this.o.lineCap;this.radius=this.xy-this.lineWidth/2;this.o.angleOffset&&(this.o.angleOffset=isNaN(this.o.angleOffset)?0:this.o.angleOffset);this.o.angleArc&&(this.o.angleArc=isNaN(this.o.angleArc)?this.PI2:this.o.angleArc);this.angleOffset=this.o.angleOffset*Math.PI/180;this.angleArc=this.o.angleArc*Math.PI/180;this.startAngle=1.5*Math.PI+this.angleOffset;this.endAngle=1.5*Math.PI+this.angleOffset+this.angleArc;var e=n(String(Math.abs(this.o.max)).length,String(Math.abs(this.o.min)).length,2)+2;this.o.displayInput&&this.i.css({width:(this.w/2+4>>0)+"px",height:(this.w/3>>0)+"px",position:"absolute","vertical-align":"middle","margin-top":(this.w/3>>0)+"px","margin-left":"-"+(this.w*3/4+2>>0)+"px",border:0,background:"none",font:this.o.fontWeight+" "+(this.w/e>>0)+"px "+this.o.font,"text-align":"center",color:this.o.inputColor||this.o.fgColor,padding:"0px","-webkit-appearance":"none"})||this.i.css({width:"0px",visibility:"hidden"})};this.change=function(e){this.cv=e;this.$.val(this.o.format(e))};this.angle=function(e){return(e-this.o.min)*this.angleArc/(this.o.max-this.o.min)};this.arc=function(e){var t,n;e=this.angle(e);if(this.o.flip){t=this.endAngle+1e-5;n=t-e-1e-5}else{t=this.startAngle-1e-5;n=t+e+1e-5}this.o.cursor&&(t=n-this.cursorExt)&&(n=n+this.cursorExt);return{s:t,e:n,d:this.o.flip&&!this.o.cursor}};this.draw=function(){var e=this.g,t=this.arc(this.cv),n,r=1;e.lineWidth=this.lineWidth;e.lineCap=this.lineCap;if(this.o.bgColor!=="none"){e.beginPath();e.strokeStyle=this.o.bgColor;e.arc(this.xy,this.xy,this.radius,this.endAngle-1e-5,this.startAngle+1e-5,true);e.stroke()}if(this.o.displayPrevious){n=this.arc(this.v);e.beginPath();e.strokeStyle=this.pColor;e.arc(this.xy,this.xy,this.radius,n.s,n.e,n.d);e.stroke();r=this.cv==this.v}e.beginPath();e.strokeStyle=r?this.o.fgColor:this.fgColor;e.arc(this.xy,this.xy,this.radius,t.s,t.e,t.d);e.stroke()};this.cancel=function(){this.val(this.v)}};e.fn.dial=e.fn.knob=function(n){return this.each(function(){var r=new t.Dial;r.o=n;r.$=e(this);r.run()}).parent()}});
 </script>
-
 <script>
-// ════════════════════════════════════════════════
-//  🎵 무드 데이터
-// ════════════════════════════════════════════════
-const MOODS = [
-  { key:'calm',       icon:'🌊', name:'Calm',   sub:'',       color:'#1e6480', listId:'PLdVl0jbmZwkNM8bjAc8jqaiyqCo0PR-71' },
-  { key:'happy',      icon:'☀️', name:'Joyful',   sub:'',     color:'#bf7030', listId:'PLdVl0jbmZwkOh04su4Y6JBDPfkHn_SoRb' },
-  { key:'melancholy', icon:'🌙', name:'Melancholy',   sub:'', color:'#5c3d7a', listId:'PLw-VjHDlEOgs658kAHR_LAaILBXb-s6Q5' },
-  { key:'focus',      icon:'🌿', name:'Focus',   sub:'',      color:'#2e6b3c', listId:'PLofDMZQSAYCBEI8CWVBM_oi7VrYD9I7_S' },
-  { key:'romantic',   icon:'🌹', name:'Romantic',   sub:'',   color:'#873a5a', listId:'PLdVl0jbmZwkO7QU_DfOAXZqSYMZCsMnuv' },
-  { key:'energy',     icon:'⚡', name:'Energy', sub:'',     color:'#a8820a', listId:'PLFgquLnL59alCl_2TQvOiD5Vgm1hCaGSI' },
-  { key:'gloomy', icon:'🌧️', name:'Gloomy', sub:'', color:'#3a3a5a', listId:'여기에_플레이리스트ID' },
-];
+// ══════════════════════════════════════════════
+// CONFIG — 플레이리스트 ID만 바꾸면 됩니다
+// ══════════════════════════════════════════════
+const PLAYLIST_ID = 'PLmyAPRLQRJ6lMbAdXYGuyZ627Y9RoX25i';
 
-// ── LCD 렌더 ───────────────────────────────────
-let selectedIdx = 0;
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+let appState      = 'nowplaying';  // 'nowplaying' | 'tracklist'
+let trackIdx      = 0;             // carousel 선택 인덱스
+let currentIdx    = 0;             // 실제 재생 중 인덱스
+let tracks        = [];            // [{ title, id }]
+let volume        = 70;
+let wheelDragged  = false;
+let isPlaying     = false;
+let carouselBuilt = false;
 
-function renderLCD() {
-  const menu = document.getElementById('lcdMenu');
-  menu.innerHTML = '';
-  // 보이는 항목: 최대 5개, 선택 항목 기준으로 스크롤
-  const visible = 5;
-  let start = Math.max(0, selectedIdx - 2);
-  let end   = Math.min(MOODS.length, start + visible);
-  if (end - start < visible) start = Math.max(0, end - visible);
-
-  for (let i = start; i < end; i++) {
-    const m   = MOODS[i];
-    const row = document.createElement('div');
-    row.className = 'lcd-row' + (i === selectedIdx ? ' active' : '');
-    row.innerHTML = `
-      <span class="r-icon">${m.icon}</span>
-      <span class="r-name">${m.name}</span>
-      <span class="r-sub">${m.sub}</span>
-      <span class="r-arr">›</span>`;
-    menu.appendChild(row);
-  }
-}
-renderLCD();
-
-// clock
-function updateClock() {
+// ══════════════════════════════════════════════
+// CLOCK
+// ══════════════════════════════════════════════
+(function clock() {
   const d = new Date();
   document.getElementById('lcdClock').textContent =
     String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+  setTimeout(clock, 15000);
+})();
+
+// ══════════════════════════════════════════════
+// COLOR — 트랙 인덱스로 고유 색상
+// ══════════════════════════════════════════════
+const HUES = [210, 30, 270, 150, 330, 50, 190, 15, 250, 120, 170, 60, 300, 90, 230];
+function trackColor(i)      { return `hsl(${HUES[i%HUES.length]}, 55%, 32%)`; }
+function trackColorLight(i) { return `hsl(${HUES[i%HUES.length]}, 60%, 58%)`; }
+
+// ══════════════════════════════════════════════
+// VIEW SWITCHING
+// ══════════════════════════════════════════════
+function showView(name) {
+  appState = name;
+  document.querySelectorAll('.lcd-view').forEach(v => v.classList.add('hidden'));
+  document.getElementById('view-' + name).classList.remove('hidden');
+  document.getElementById('hTitle').textContent = name === 'nowplaying' ? 'Now Playing' : 'Tracks';
+  document.getElementById('hLeft').textContent  = name === 'nowplaying' ? '\u00a0' : '‹';
+  document.getElementById('hRight').textContent = name === 'nowplaying' && isPlaying ? '‖' : '▶';
+  if (name === 'tracklist') openTracklist();
 }
-updateClock();
-setInterval(updateClock, 15000);
 
-// ── jQuery Knob — infinite iPod wheel ────────────────
-$(function() {
-  var v, up = 0, down = 0;
+// ══════════════════════════════════════════════
+// TRACK DATA
+// ══════════════════════════════════════════════
+function ensureTrackSlots() {
+  let ids = [];
+  if (ytReady) try { ids = ytPlayer.getPlaylist() || []; } catch(_){}
+  const count = ids.length || Math.max(tracks.length, 20);
+  for (let i = 0; i < count; i++) {
+    if (!tracks[i]) tracks[i] = { title: null, id: ids[i] || null };
+    else if (ids[i]) tracks[i].id = ids[i];
+  }
+  // trim excess
+  if (ids.length > 0 && tracks.length > ids.length) tracks.length = ids.length;
+}
 
-  $(".ipod-knob").knob({
-    min:          0,
-    max:          20,
-    stopper:      false,
-    cursor:       true,
-    thickness:    0.38,       // ring thickness: 38% → outer ring only, center open
-    width:        210,
-    height:       210,
-    fgColor:      "rgba(160,160,158,0.0)",   // cursor dot: invisible (we use CSS)
-    bgColor:      "rgba(0,0,0,0.0)",         // ring track: transparent
-    displayInput: false,
-    change: function() {
-      if (v > this.cv) {
-        if (up) {
-          moveSelection(-1);
-          up = 0;
-        } else { up = 1; down = 0; }
-      } else if (v < this.cv) {
-        if (down) {
-          moveSelection(+1);
-          down = 0;
-        } else { down = 1; up = 0; }
-      }
-      v = this.cv;
-    }
-  });
+function trackLabel(i) {
+  return (tracks[i] && tracks[i].title) ? tracks[i].title : `Track ${i + 1}`;
+}
 
-  // Make the knob canvas cover the entire wheel shell but pass clicks to center
-  const canvas = $('#knobWrap canvas');
-  canvas.css({
-    position: 'absolute',
-    top: '0', left: '0',
-    width: '210px', height: '210px',
-    opacity: 0,           // fully transparent — interaction only
-    cursor: 'grab'
-  });
-  canvas.css('pointer-events', 'auto');
+// ══════════════════════════════════════════════
+// 3D CAROUSEL — smooth rAF engine
+// ══════════════════════════════════════════════
+let carouselAngle  = 0;
+let carouselTarget = 0;
+let carouselRAF    = null;
+let trackCount     = 20;
 
-  // Center button: don't let knob capture its touch/click
-  $('#centerBtn').on('mousedown touchstart', function(e) {
-    e.stopPropagation();
-  });
-});
+function buildTrackCards() {
+  const scene = document.getElementById('albumsScene');
+  scene.innerHTML = '';
+  carouselBuilt = true;
+  for (let i = 0; i < trackCount; i++) {
+    const card = document.createElement('div');
+    card.className = 'album-card';
+    card.id = 'tcard-' + i;
+    card.style.background = `linear-gradient(145deg, ${trackColorLight(i)}, ${trackColor(i)})`;
+    card.innerHTML = `
+      <div class="album-card-lines"></div>
+      <div class="album-card-shine"></div>
+      <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px">
+        <span style="font-size:18px;line-height:1">♪</span>
+        <span id="tcard-num-${i}" style="font-size:8px;color:rgba(255,255,255,.85);font-family:monospace;font-weight:600">${i+1}</span>
+      </div>`;
+    scene.appendChild(card);
+  }
+}
 
-function moveSelection(dir) {
-  selectedIdx = (selectedIdx + dir + MOODS.length) % MOODS.length;
-  renderLCD();
+function positionCards(angle) {
+  const N   = trackCount;
+  if (N === 0) return;
+  const cur = ((Math.round(angle) % N) + N) % N;
+  document.getElementById('albumsName').textContent = trackLabel(cur);
+
+  for (let i = 0; i < N; i++) {
+    const card = document.getElementById('tcard-' + i);
+    if (!card) continue;
+    let off = i - angle;
+    off = off - N * Math.round(off / N);
+    const abs = Math.abs(off);
+    if (abs > 2.6) { card.style.opacity='0'; card.style.zIndex='0'; continue; }
+    const tx = off * 62;
+    const tz = 25 * Math.max(0, 1 - abs);
+    const ry = -off * 28;
+    const sc = Math.max(0.6, 1 - abs * 0.15);
+    const op = Math.max(0, 1 - abs * 0.28);
+    card.style.transform = `translateX(${tx}px) translateZ(${tz}px) rotateY(${ry}deg) scale(${sc})`;
+    card.style.opacity   = op;
+    card.style.zIndex    = Math.round(5 - abs * 2);
+    // 현재 재생 중인 카드 강조
+    card.style.outline   = (i === currentIdx) ? '2px solid rgba(255,240,140,.7)' : 'none';
+  }
+}
+
+function tickCarousel() {
+  const diff = carouselTarget - carouselAngle;
+  if (Math.abs(diff) < 0.001) {
+    carouselAngle = carouselTarget;
+    positionCards(carouselAngle);
+    carouselRAF = null;
+    return;
+  }
+  carouselAngle += diff * 0.13;
+  positionCards(carouselAngle);
+  carouselRAF = requestAnimationFrame(tickCarousel);
+}
+
+function spinCarousel(dir) {
+  const N = trackCount;
+  trackIdx = ((trackIdx + dir) % N + N) % N;
+  carouselTarget += dir;
+  if (!carouselRAF) carouselRAF = requestAnimationFrame(tickCarousel);
   if (navigator.vibrate) navigator.vibrate(6);
 }
 
-// ── Center button ──────────────────────────────
-document.getElementById('centerBtn').addEventListener('click', function() {
-  const btn = this;
-  btn.classList.add('pressed');
+function jumpCarouselTo(idx) {
+  const N = trackCount;
+  if (N === 0) return;
+  idx = ((idx % N) + N) % N;
+  trackIdx = idx;
+  let diff = idx - (((Math.round(carouselAngle) % N) + N) % N);
+  if (diff > N/2) diff -= N;
+  if (diff < -N/2) diff += N;
+  carouselTarget = carouselAngle + diff;
+  if (!carouselRAF) carouselRAF = requestAnimationFrame(tickCarousel);
+}
 
-  // ripple
+function openTracklist() {
+  ensureTrackSlots();
+  const newCount = Math.max(tracks.length, 1);
+  if (newCount !== trackCount || !carouselBuilt) {
+    trackCount = newCount;
+    buildTrackCards();
+  }
+  jumpCarouselTo(currentIdx);
+}
+
+function updateTrackCardTitle(idx, title) {
+  if (!tracks[idx]) tracks[idx] = { title: null, id: null };
+  tracks[idx].title = title;
+  if (appState === 'tracklist') {
+    const N = trackCount;
+    const cur = ((Math.round(carouselAngle) % N) + N) % N;
+    if (cur === idx) document.getElementById('albumsName').textContent = title;
+  }
+}
+
+// ══════════════════════════════════════════════
+// NOW PLAYING ART
+// ══════════════════════════════════════════════
+function updateNPArt(idx) {
+  document.getElementById('npArt').style.background =
+    `linear-gradient(145deg, ${trackColorLight(idx)}, ${trackColor(idx)})`;
+  document.getElementById('npIcon').textContent = '♪';
+}
+
+// ══════════════════════════════════════════════
+// WHEEL TURN
+// ══════════════════════════════════════════════
+function onWheelTurn(dir) {
+  if (appState === 'tracklist') {
+    spinCarousel(dir);
+  } else {
+    volume = Math.max(0, Math.min(100, volume + dir * 6));
+    document.getElementById('volFill').style.width = volume + '%';
+    if (ytReady) try { ytPlayer.setVolume(volume); } catch(_) {}
+    if (navigator.vibrate) navigator.vibrate(3);
+  }
+}
+
+// ══════════════════════════════════════════════
+// BUTTON ACTIONS
+// ══════════════════════════════════════════════
+function onCenter() {
+  ripple();
+  if (navigator.vibrate) navigator.vibrate([8, 25, 8]);
+  if (appState === 'tracklist') {
+    currentIdx = trackIdx;
+    updateNPArt(currentIdx);
+    document.getElementById('npTitle').textContent  = trackLabel(currentIdx);
+    document.getElementById('npArtist').textContent = `Track ${currentIdx + 1}`;
+    showView('nowplaying');
+    if (ytReady) try { ytPlayer.playVideoAt(currentIdx); } catch(_) {}
+  } else {
+    togglePlay();
+  }
+}
+
+function onMenu() {
+  if (navigator.vibrate) navigator.vibrate(6);
+  showView(appState === 'nowplaying' ? 'tracklist' : 'nowplaying');
+}
+
+function onPrev() {
+  if (navigator.vibrate) navigator.vibrate(6);
+  if (appState === 'nowplaying') prevTrack();
+  else spinCarousel(-1);
+}
+
+function onNext() {
+  if (navigator.vibrate) navigator.vibrate(6);
+  if (appState === 'nowplaying') nextTrack();
+  else spinCarousel(+1);
+}
+
+function onPlayPauseBtn() {
+  if (appState === 'tracklist') { onCenter(); return; }
+  togglePlay();
+}
+
+// ══════════════════════════════════════════════
+// RIPPLE
+// ══════════════════════════════════════════════
+function ripple() {
+  const btn = document.getElementById('centerBtn');
+  btn.classList.add('pressed');
   const ring = document.createElement('div');
   ring.className = 'ripple-ring';
   btn.appendChild(ring);
-  setTimeout(() => ring.remove(), 400);
-
+  setTimeout(() => ring.remove(), 420);
   setTimeout(() => btn.classList.remove('pressed'), 140);
-  if (navigator.vibrate) navigator.vibrate([8, 25, 8]);
-  setTimeout(() => launchPlayer(MOODS[selectedIdx]), 180);
+}
+
+// ══════════════════════════════════════════════
+// JQUERY KNOB + TAP ZONES
+// ══════════════════════════════════════════════
+$(function() {
+  let kv, up=0, dn=0;
+  $(".ipod-knob").knob({
+    min:0, max:20, stopper:false, cursor:true,
+    thickness:0.38, width:210, height:210,
+    fgColor:"rgba(0,0,0,0)", bgColor:"rgba(0,0,0,0)",
+    displayInput:false,
+    change: function() {
+      wheelDragged = true;
+      if (kv > this.cv) { if(up){onWheelTurn(-1);up=0}else{up=1;dn=0} }
+      else if (kv < this.cv) { if(dn){onWheelTurn(+1);dn=0}else{dn=1;up=0} }
+      kv = this.cv;
+    }
+  });
+  const $cv = $('#knobWrap canvas');
+  $cv.css({ position:'absolute', top:0, left:0, width:'210px', height:'210px', opacity:0, cursor:'grab' });
+  $cv.css('pointer-events', 'auto');
+  $('#centerBtn').on('mousedown touchstart', e => e.stopPropagation());
+
+  let tx0=0, ty0=0;
+  $cv.on('mousedown touchstart', function(e) {
+    wheelDragged = false;
+    const pt = e.originalEvent.touches ? e.originalEvent.touches[0] : e;
+    tx0 = pt.clientX; ty0 = pt.clientY;
+  });
+  $cv.on('click', function(e) {
+    if (wheelDragged) { wheelDragged = false; return; }
+    fireZone(e.clientX, e.clientY);
+  });
+  $cv.on('touchend', function(e) {
+    const t = e.originalEvent.changedTouches[0];
+    if (Math.hypot(t.clientX-tx0, t.clientY-ty0) < 14 && !wheelDragged) fireZone(t.clientX, t.clientY);
+    wheelDragged = false;
+  });
 });
 
-// ── Launch player ──────────────────────────────
-function launchPlayer(mood) {
-  document.getElementById('moodTitle').textContent = mood.name;
-  document.getElementById('moodBadge').textContent = mood.sub;
-  document.getElementById('glow').style.background =
-    `radial-gradient(circle at 50% 30%, ${mood.color} 0%, transparent 68%)`;
-  document.getElementById('playlistLink').href =
-    `https://www.youtube.com/playlist?list=${mood.listId}`;
-  document.getElementById('statusMsg').textContent  = 'Loading...';
-  document.getElementById('tName').textContent      = 'Preparing...';
-  document.getElementById('tArtist').textContent    = '';
-
-  document.getElementById('ipod-screen').classList.add('hidden');
-  document.getElementById('player-screen').classList.remove('hidden');
-
-  loadPlaylist(mood.listId);
+function fireZone(x, y) {
+  const rect = document.getElementById('wheelShell').getBoundingClientRect();
+  const cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
+  const dx = x-cx, dy = y-cy;
+  if (Math.hypot(dx, dy) < 42) return;
+  const a = Math.atan2(dy, dx) * 180 / Math.PI;
+  if      (a >= -135 && a <= -45) onMenu();
+  else if (a >  -45  && a <   45) onNext();
+  else if (a >=  45  && a <= 135) onPlayPauseBtn();
+  else                             onPrev();
 }
 
-function goBack() {
-  stopInfoLoop();
-  if (ytReady) ytPlayer.pauseVideo();
-  document.getElementById('player-screen').classList.add('hidden');
-  document.getElementById('ipod-screen').classList.remove('hidden');
-}
+document.getElementById('centerBtn').addEventListener('click', () => setTimeout(onCenter, 50));
 
-// ════════════════════════════════════════════════
-//  YouTube Player
-// ════════════════════════════════════════════════
-let ytPlayer  = null;
-let ytReady   = false;
-let isPlaying = false;
-let infoTimer = null;
-let shuffled  = false;
+// ══════════════════════════════════════════════
+// YOUTUBE
+// ══════════════════════════════════════════════
+let ytPlayer = null, ytReady = false;
+let infoTimer = null, progTimer = null, shuffled = false;
 
 window.onYouTubeIframeAPIReady = () => {
   ytPlayer = new YT.Player('yt-player', {
-    playerVars: { autoplay:1, controls:1, rel:0, modestbranding:1, iv_load_policy:3 },
+    playerVars: { autoplay:1, controls:0, rel:0, modestbranding:1, iv_load_policy:3, playsinline:1 },
     events: {
-      onReady:       () => { ytReady = true; },
+      onReady: () => {
+        ytReady = true;
+        ytPlayer.setVolume(volume);
+        // NFC 태그 → 즉시 재생
+        const go = () => {
+          try { ytPlayer.loadPlaylist({ listType:'playlist', list:PLAYLIST_ID, index:0 }); } catch(_){}
+        };
+        go();
+      },
       onStateChange: onYTState
     }
   });
@@ -672,66 +629,90 @@ window.onYouTubeIframeAPIReady = () => {
 
 function onYTState(e) {
   const S = YT.PlayerState;
+  // 플레이리스트 로드 완료 후 첫 재생 시 트랙 목록 초기화
   if (e.data === S.PLAYING && !shuffled) {
     shuffled = true;
-    try {
-      ytPlayer.setShuffle(true);
-      ytPlayer.playVideoAt(Math.floor(Math.random() * 30) + 1);
-    } catch(err) {}
+    ensureTrackSlots();
+    trackCount = tracks.length || 20;
+    try { ytPlayer.setShuffle(false); } catch(_){} // 순서대로 재생
   }
-  if (e.data === S.PLAYING) { setIcon(true);  startInfoLoop(); }
-  if (e.data === S.PAUSED)  { setIcon(false); stopInfoLoop();  }
-  if (e.data === S.ENDED)   { nextTrack(); }
+  if (e.data === S.PLAYING)   { setPlay(true);  startTimers(); updateCurrentIdx(); }
+  if (e.data === S.PAUSED)    { setPlay(false); stopTimers(); }
+  if (e.data === S.ENDED)     { nextTrack(); }
+  if (e.data === S.BUFFERING) { document.getElementById('npTitle').textContent = 'Loading...'; }
 }
 
-function startInfoLoop() {
-  stopInfoLoop();
-  updateInfo();
-  infoTimer = setInterval(updateInfo, 1500);
+function updateCurrentIdx() {
+  if (!ytReady) return;
+  try {
+    const idx = ytPlayer.getPlaylistIndex();
+    if (idx >= 0) {
+      currentIdx = idx;
+      updateNPArt(currentIdx);
+      // tracklist 열려있으면 현재 트랙 위치도 업데이트
+      if (appState === 'tracklist') positionCards(carouselAngle);
+    }
+  } catch(_){}
 }
-function stopInfoLoop() { clearInterval(infoTimer); }
+
+function setPlay(p) {
+  isPlaying = p;
+  document.querySelectorAll('.np-bar').forEach(b => b.classList.toggle('paused', !p));
+  if (appState === 'nowplaying')
+    document.getElementById('hRight').textContent = p ? '‖' : '▶';
+}
+
+function startTimers() {
+  stopTimers();
+  updateInfo();
+  infoTimer = setInterval(updateInfo, 1800);
+  progTimer = setInterval(updateProg, 800);
+}
+function stopTimers() { clearInterval(infoTimer); clearInterval(progTimer); }
 
 function updateInfo() {
   if (!ytReady || !ytPlayer.getVideoData) return;
-  const d = ytPlayer.getVideoData();
-  if (!d || !d.title) return;
-  document.getElementById('tName').textContent    = d.title  || '—';
-  document.getElementById('tArtist').textContent  = d.author || '—';
-  document.getElementById('statusMsg').textContent = '';
-  if (d.video_id) document.getElementById('btnYT').href =
-    `https://www.youtube.com/watch?v=${d.video_id}`;
-  document.getElementById('btnSP').href =
-    `https://open.spotify.com/search/${encodeURIComponent(d.title)}`;
+  try {
+    const d = ytPlayer.getVideoData();
+    if (!d || !d.title) return;
+    document.getElementById('npTitle').textContent  = d.title  || '—';
+    document.getElementById('npArtist').textContent = d.author || '—';
+    // 트랙 제목 캐시
+    const idx = ytPlayer.getPlaylistIndex();
+    if (idx >= 0) updateTrackCardTitle(idx, d.title);
+  } catch(_) {}
 }
 
-function loadPlaylist(listId) {
-  shuffled = false;
-  const load = () => {
-    ytPlayer.loadPlaylist({ listType:'playlist', list:listId, index:0 });
-  };
-  if (ytReady) load();
-  else {
-    const w = setInterval(() => { if (ytReady) { clearInterval(w); load(); } }, 200);
-  }
+function updateProg() {
+  if (!ytReady) return;
+  try {
+    const cur = ytPlayer.getCurrentTime() || 0;
+    const dur = ytPlayer.getDuration()    || 0;
+    document.getElementById('npCur').textContent  = fmt(cur);
+    document.getElementById('npRem').textContent  = dur > 0 ? '-' + fmt(dur-cur) : '-0:00';
+    document.getElementById('progFill').style.width = dur > 0 ? (cur/dur*100)+'%' : '0%';
+  } catch(_) {}
+}
+
+function fmt(s) {
+  s = Math.floor(s||0);
+  return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
 }
 
 function togglePlay() {
   if (!ytReady) return;
-  if (isPlaying) ytPlayer.pauseVideo();
-  else           ytPlayer.playVideo();
+  try { isPlaying ? ytPlayer.pauseVideo() : ytPlayer.playVideo(); } catch(_) {}
 }
-function nextTrack() { if (ytReady) ytPlayer.nextVideo(); }
-function prevTrack() { if (ytReady) ytPlayer.previousVideo(); }
-function setIcon(p) {
-  isPlaying = p;
-  document.getElementById('iconPause').style.display = p ? '' : 'none';
-  document.getElementById('iconPlay').style.display  = p ? 'none' : '';
-}
+function nextTrack() { if (ytReady) try { ytPlayer.nextVideo(); } catch(_){} }
+function prevTrack() { if (ytReady) try { ytPlayer.previousVideo(); } catch(_){} }
 
-// YouTube API
-const s = document.createElement('script');
-s.src = 'https://www.youtube.com/iframe_api';
-document.head.appendChild(s);
+// ── Load YouTube API ──
+const _s = document.createElement('script');
+_s.src = 'https://www.youtube.com/iframe_api';
+document.head.appendChild(_s);
+
+// ── Init ──
+updateNPArt(0);
 </script>
 </body>
 </html>
