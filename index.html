@@ -71,12 +71,38 @@ html,body{
   text-shadow:0 1px 0 rgba(255,255,255,.9);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.6);
 }
-.lcd-header .h-title{flex:1;text-align:center;font-size:10.5px}
-.lcd-header .h-icon{font-size:10px;min-width:14px;color:#555}
+.lcd-header .h-title {
+  flex: 1;
+  text-align: left;      /* 왼쪽 정렬로 변경 */
+  font-size: 10.5px;
+  padding-left: 0px;     /* 왼쪽 아이콘과 너무 붙지 않게 여백 추가 */
+  color: #222;           /* 현재 설정된 컬러값 (#222) */
+}
+.lcd-header .h-icon{
+  font-size:10px;
+  min-width:5px;
+  color:#555
+}
 .lcd-header #hRight{color:#53bde5;font-size:9px}
 
+/* 헤더 우측 영역 정렬 */
+.header-right-zone {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: absolute;
+  right: 8px;
+}
+
 /* 뷰 */
-.lcd-view{position:absolute;top:15px;left:0;right:0;bottom:16px;overflow:hidden}
+.lcd-view{
+    position: absolute;
+    top: 20px;    /* 헤더 높이에 맞춤 */
+    left: 0;
+    right: 0;
+    bottom: 0;    /* 바닥까지 꽉 채움 */
+    overflow: hidden;
+}
 .lcd-view.hidden{display:none}
 
 /* Now Playing */
@@ -97,7 +123,7 @@ html,body{
 .np-art-reflect{
   display:block;
   position:absolute;
-  top:80%;
+  top:108%;
   left:0; width:100%; height:100%;
   transform:scaleY(-1);
   -webkit-mask-image:linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 60%);
@@ -139,8 +165,34 @@ html,body{
 .np-bar.paused{animation:none;height:3px!important}
 @keyframes bar-bounce{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
 
-.np-prog-row{display:flex;align-items:center;gap:2px;padding:0 15px;height:20px;margin-top:4px}
-.prog-time{font-size:9px;color:#4a6a4a;font-family:monospace;font-weight:bold;flex-shrink:0;min-width:26px}
+/* 재생 바 위치 상향 및 레이어 우선순위 조정 */
+.np-prog-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 15px;
+  height: 20px;
+  
+  /* 위치 조정 */
+  position: absolute;
+  bottom: 25px;      /* 하단에서 25px 띄움 (수치를 키울수록 위로 올라갑니다) */
+  left: 0;
+  right: 0;
+  
+  /* 레이어 우선순위 */
+  z-index: 50;       /* 썸네일 반사 효과보다 위에 오도록 설정 */
+}
+
+/* 수정된 .prog-time 스타일 */
+.prog-time {
+  font-size: 9px;
+  color: #4A4F5A; /* 기존 #4a6a4a에서 블랙으로 변경 */
+  font-family: monospace;
+  font-weight: bold;
+  flex-shrink: 0;
+  min-width: 26px;
+}
+
 .prog-time:last-child{text-align:right}
 .prog-track{flex:1;height:12px;background:linear-gradient(180deg,#e8e8e8,#ffffff,#efefef,#e8e8e8);border-radius:0px;border:0px solid #aaa;overflow:hidden;box-shadow:inset 0 0px 1px rgba(0,0,0,.15)}
 .prog-fill{height:100%;background:linear-gradient(180deg,#91a3cf,#83a3d4,#6a96ca,#7fbae7);border-radius:0px;transition:width .6s linear;width:0%;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
@@ -152,7 +204,7 @@ html,body{
 .album-card-reflect{
   display:block;
   position:absolute;
-  top:80%;          /* 카드 바로 아래 */
+  top:101%;          /* 카드 바로 아래 */
   left:0; width:100%; height:100%;
   transform:scaleY(-1);           /* 상하 반전 */
   -webkit-mask-image:linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 60%);
@@ -170,10 +222,46 @@ html,body{
 
 /* 상태바 */
 .lcd-status{position:absolute;bottom:0;left:0;right:0;height:16px;padding:2px 7px;display:flex;justify-content:space-between;align-items:center;font-size:8px;color:rgba(0,0,0,.4);background:rgba(0,0,0,.05);font-family:monospace;z-index:2;}
-.batt{display:flex;align-items:center;gap:1px}
-.batt-body{width:16px;height:7px;border:1px solid rgba(0,0,0,.3);border-radius:1px;padding:1px}
-.batt-fill{width:68%;height:100%;background:#4a8a3a;border-radius:1px}
-.batt-nub{width:2px;height:3px;background:rgba(0,0,0,.3);border-radius:0 1px 1px 0}
+
+/* 아이팟 스타일 배터리 재정의 */
+.batt {
+  display: flex;
+  align-items: center;
+  gap: 0.5px;
+}
+
+.batt-body {
+  width: 14px;  /* 아이팟 비율에 맞게 조정 */
+  height: 7px;
+  border: 1px solid #555;
+  border-radius: 1px;
+  padding: 0.5px;
+  background: #fff;
+}
+
+.batt-fill {
+  width: 100%;
+  height: 100%;
+  background: #4cd964; /* 아이팟 특유의 배터리 녹색 */
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+.batt-nub {
+  width: 1.5px;
+  height: 3px;
+  background: #555;
+  border-radius: 0 1px 1px 0;
+}
+
+/* 충전 중일 때 색상 변화 (옵션) */
+.batt-fill.charging {
+  background: #34c759;
+}
+
+/* 저전력 상태 */
+.batt-fill.low {
+  background: #ff3b30;
+}
 
 /* 휠 버튼 */
 #wheelShell{cursor:grab;}
@@ -876,7 +964,15 @@ uNxuNxv+S5iTfI+J1Gy3om5iTfI+J1Gy3om5iTfI+P/Z" transform="matrix(0.24 0 0 0.24 18
       <div class="lcd-header">
         <span class="h-icon" id="hLeft">&nbsp;</span>
         <span class="h-title" id="hTitle">Now Playing</span>
-        <span class="h-icon" id="hRight">&#9654;</span>
+        <div class="header-right-zone">
+            <span class="h-icon" id="hRight">&#9654;</span>
+            <div class="batt" id="battIndicator">
+                <div class="batt-body">
+                    <div class="batt-fill" id="realBattFill"></div>
+                </div>
+                <div class="batt-nub"></div>
+            </div>
+        </div>
       </div>
       <div class="lcd-view" id="view-nowplaying">
         <div class="np-body">
@@ -916,10 +1012,6 @@ uNxuNxv+S5iTfI+J1Gy3om5iTfI+J1Gy3om5iTfI+P/Z" transform="matrix(0.24 0 0 0.24 18
         <div class="albums-scene" id="albumsScene"></div>
         <div class="albums-name" id="albumsName">&#8212;</div>
       </div>
-      <div class="lcd-status">
-        <span id="lcdClock">00:00</span>
-        <div class="batt"><div class="batt-body"><div class="batt-fill"></div></div><div class="batt-nub"></div></div>
-      </div>
     </div>
 </div>
 
@@ -941,13 +1033,24 @@ const PLAYLIST_ID = 'PLmyAPRLQRJ6lMbAdXYGuyZ627Y9RoX25i';
 let appState='nowplaying', trackIdx=0, currentIdx=0;
 let tracks=[], volume=70, wheelDragged=false, isPlaying=false, carouselBuilt=false;
 
-// 시계
-(function clock(){
-  const d=new Date();
-  document.getElementById('lcdClock').textContent=
-    String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
-  setTimeout(clock,15000);
-})();
+
+// 배터리 상태 연동 함수
+function updateBatteryStatus() {
+  if (!navigator.getBattery) return;
+  navigator.getBattery().then(battery => {
+    const fill = document.getElementById('realBattFill');
+    const refresh = () => {
+      const level = battery.level * 100;
+      fill.style.width = level + '%';
+      if (battery.charging) fill.style.background = "#34c759";
+      else if (level <= 20) fill.style.background = "#ff3b30";
+      else fill.style.background = "#4cd964";
+    };
+    refresh();
+    battery.addEventListener('levelchange', refresh);
+    battery.addEventListener('chargingchange', refresh);
+  });
+}
 
 // 색상
 const HUES=[210,30,270,150,330,50,190,15,250,120,170,60,300,90,230];
@@ -962,7 +1065,6 @@ function showView(name){
   document.querySelectorAll('.lcd-view').forEach(v=>v.classList.add('hidden'));
   document.getElementById('view-'+name).classList.remove('hidden');
   document.getElementById('hTitle').textContent=name==='nowplaying'?'Now Playing':'Tracks';
-  document.getElementById('hLeft').textContent =name==='nowplaying'?' ':'❮';
   document.getElementById('hRight').textContent=name==='nowplaying'&&isPlaying?'❚❚':'▶';
   if(name==='tracklist') openTracklist();
 }
@@ -1381,6 +1483,7 @@ document.head.appendChild(_s);
 // iOS 보정 스크립트 제거됨 (foreignObject → CSS overlay 방식으로 변경)
 
 // 초기화
+updateBatteryStatus();
 updateNPArt(0);
 </script>
 </body>
