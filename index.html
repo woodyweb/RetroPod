@@ -73,14 +73,14 @@ html,body{
 }
 .lcd-header .h-title{flex:1;text-align:center;font-size:10.5px}
 .lcd-header .h-icon{font-size:10px;min-width:14px;color:#555}
-.lcd-header #hRight{color:#50BFD0;font-size:9px}
+.lcd-header #hRight{color:#53bde5;font-size:9px}
 
 /* 뷰 */
-.lcd-view{position:absolute;top:18px;left:0;right:0;bottom:16px;overflow:hidden}
+.lcd-view{position:absolute;top:15px;left:0;right:0;bottom:16px;overflow:hidden}
 .lcd-view.hidden{display:none}
 
 /* Now Playing */
-.np-body{display:flex;gap:8px;padding:10px 7px 0;height:100px;align-items:flex-start}
+.np-body{display:flex;gap:15px;padding:15px 15px 0;height:110px;align-items:flex-start}
 .np-art{
   width:80px;height:80px;flex-shrink:0;border-radius:0;
   display:flex;align-items:center;justify-content:center;
@@ -115,14 +115,14 @@ html,body{
 .np-bar.paused{animation:none;height:3px!important}
 @keyframes bar-bounce{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
 
-.np-prog-row{display:flex;align-items:center;gap:4px;padding:0 7px;height:20px;margin-top:4px}
-.prog-time{font-size:7.5px;color:#4a6a4a;font-family:monospace;flex-shrink:0;min-width:26px}
+.np-prog-row{display:flex;align-items:center;gap:1px;padding:0 15px;height:20px;margin-top:4px}
+.prog-time{font-size:9px;color:#4a6a4a;font-family:monospace;font-weight:bold;flex-shrink:0;min-width:26px}
 .prog-time:last-child{text-align:right}
-.prog-track{flex:1;height:6px;background:linear-gradient(180deg,#c0c0c0,#d8d8d8);border-radius:3px;border:1px solid #aaa;overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.15)}
-.prog-fill{height:100%;background:linear-gradient(180deg,#7ec8f0,#3a88e0);border-radius:3px;transition:width .6s linear;width:0%;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.prog-track{flex:1;height:12px;background:linear-gradient(180deg,#e8e8e8,#f0f0f0);border-radius:0px;border:1px solid #aaa;overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.15)}
+.prog-fill{height:100%;background:linear-gradient(180deg,#ade9ff,#53bde5);border-radius:0px;transition:width .6s linear;width:0%;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
 
 /* 트랙 캐러셀 */
-.albums-scene{height:92px;position:relative;display:flex;align-items:center;justify-content:center;perspective:280px;overflow:visible;}
+.albums-scene{height:120px;position:relative;display:flex;align-items:center;justify-content:center;perspective:280px;overflow:visible;}
 .album-card{position:absolute;width:80px;height:80px;border-radius:0;display:flex;align-items:center;justify-content:center;transform-style:preserve-3d;overflow:hidden;box-shadow:none;}
 .album-card-main{position:absolute;inset:0;overflow:hidden;border-radius:0;background:inherit;}
 .album-card-reflect{display:none;}
@@ -130,7 +130,7 @@ html,body{
 .album-card-shine{display:none;}
 .card-thumb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:0;z-index:3;opacity:0;transition:opacity .35s ease;}
 .card-thumb.loaded{opacity:1}
-.albums-name{text-align:center;font-size:10px;font-weight:500;color:#2a3a2a;padding:2px 8px;height:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.albums-name{text-align:center;font-size:10px;font-weight:500;color:#2a3a2a;padding:10px 8px;height:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
 /* 상태바 */
 .lcd-status{position:absolute;bottom:0;left:0;right:0;height:16px;padding:2px 7px;display:flex;justify-content:space-between;align-items:center;font-size:8px;color:rgba(0,0,0,.4);background:rgba(0,0,0,.05);font-family:monospace;z-index:2;}
