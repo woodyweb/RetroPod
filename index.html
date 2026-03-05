@@ -1242,7 +1242,7 @@ let ytPlayer=null,ytReady=false,infoTimer=null,progTimer=null,shuffled=false;
 
 window.onYouTubeIframeAPIReady=()=>{
   ytPlayer=new YT.Player('yt-player',{
-    playerVars:{autoplay:1,controls:0,rel:0,modestbranding:1,iv_load_policy:3,playsinline:1},
+    playerVars:{autoplay:0,controls:0,rel:0,modestbranding:1,iv_load_policy:3,playsinline:1},
     events:{
     onReady:()=>{
       ytReady=true;
