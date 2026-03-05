@@ -86,7 +86,7 @@ html,body{
   display:flex;align-items:center;justify-content:center;
   position:relative;
   overflow:visible;
-  transform: perspective(200px) rotateY(15deg);
+  transform: perspective(200px) rotateY(20deg);
   box-shadow:none;
   transition:background .5s ease;
 }
@@ -97,11 +97,11 @@ html,body{
 .np-art-reflect{
   display:block;
   position:absolute;
-  top:75%;
+  top:80%;
   left:0; width:100%; height:100%;
   transform:scaleY(-1);
-  -webkit-mask-image:linear-gradient(to top, rgba(0,0,0,0.15) 0%, transparent 50%);
-  mask-image:linear-gradient(to top, rgba(0,0,0,0.15) 0%, transparent 50%);
+  -webkit-mask-image:linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 60%);
+  mask-image:linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 60%);
   pointer-events:none;
 }
 .np-art-reflect-inner{
@@ -142,11 +142,11 @@ html,body{
 .album-card-reflect{
   display:block;
   position:absolute;
-  top:75%;          /* 카드 바로 아래 */
+  top:80%;          /* 카드 바로 아래 */
   left:0; width:100%; height:100%;
   transform:scaleY(-1);           /* 상하 반전 */
-  -webkit-mask-image:linear-gradient(to top, rgba(0,0,0,0.15) 0%, transparent 70%);
-  mask-image:linear-gradient(to top, rgba(0,0,0,0.15) 0%, transparent 70%);
+  -webkit-mask-image:linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 60%);
+  mask-image:linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 60%);
   pointer-events:none;
 }
 .album-card-reflect-inner{
@@ -1244,19 +1244,11 @@ window.onYouTubeIframeAPIReady=()=>{
   ytPlayer=new YT.Player('yt-player',{
     playerVars:{autoplay:1,controls:0,rel:0,modestbranding:1,iv_load_policy:3,playsinline:1},
     events:{
-    onReady:()=>{
-      ytReady=true;
-      try{ytPlayer.setVolume(volume);ytPlayer.unMute();}catch(_){}
-      try{
-        ytPlayer.loadPlaylist({listType:'playlist',list:PLAYLIST_ID,index:0});
-        // 플레이리스트 로드 후 곡 수 파악해서 랜덤 이동
-        setTimeout(()=>{
-          const total = ytPlayer.getPlaylist()?.length || 1;
-          const randIdx = Math.floor(Math.random() * total);
-          ytPlayer.playVideoAt(randIdx);
-        }, 1000);
-      }catch(_){}
-    },
+      onReady:()=>{
+        ytReady=true;
+        try{ytPlayer.setVolume(volume);ytPlayer.unMute();}catch(_){}
+        try{ytPlayer.loadPlaylist({listType:'playlist',list:PLAYLIST_ID,index:0});}catch(_){}
+      },
       onStateChange:onYTState
     }
   });
@@ -1266,7 +1258,7 @@ function onYTState(e){
   const S=YT.PlayerState;
   if(e.data===S.PLAYING&&!shuffled){
     shuffled=true;ensureTrackSlots();trackCount=tracks.length||20;
-    try{ytPlayer.setShuffle(true);}catch(_){}
+    try{ytPlayer.setShuffle(false);}catch(_){}
     setTimeout(loadAllCardThumbs,400);
   }
   if(e.data===S.PLAYING) {setPlay(true);startTimers();updateCurrentIdx();applyVolume();}
