@@ -164,9 +164,9 @@ html,body{
 /* 전광판 애니메이션 */
 @keyframes marquee {
   0% { transform: translateX(0); }
-  20% { transform: translateX(0); } /* 시작 지점 잠시 대기 */
-  80% { transform: translateX(-100%); }
-  100% { transform: translateX(-100%); }
+  10% { transform: translateX(0); } /* 시작 전 잠시 대기 */
+  90% { transform: translateX(calc(-100% + 140px)); } /* 영역 크기에 맞춰 적절히 이동 */
+  100% { transform: translateX(calc(-100% + 140px)); }
 }
 
 /* 흐르는 텍스트를 위한 컨테이너 설정 */
@@ -178,8 +178,12 @@ html,body{
 
 .scrolling {
   display: inline-block;
-  padding-right: 50px; /* 루프 시 간격 확보 */
-  animation: marquee 10s linear infinite alternate;
+  white-space: nowrap;
+  width: auto;
+  text-overflow: clip !important; /* ★ 중요: '...'을 없애고 글자를 다 보여줌 */
+  overflow: visible !important;
+  animation: marquee 8s linear infinite alternate;
+  will-change: transform;
 }
 
 /* 슬라이드 애니메이션 정의 */
@@ -202,6 +206,7 @@ html,body{
   justify-content: flex-start;
   gap: 1px;               /* 요소 간 간격 */
   padding-top: 5px;
+  overflow: hidden;
 }
 
 /* 제목: Bold, Black */
@@ -1582,51 +1587,53 @@ function applyMarquee(elementId) {
   const el = document.getElementById(elementId);
   if (!el) return;
   
-  el.classList.remove('scrolling'); // 초기화
-  // 텍스트가 넘칠 때만 애니메이션 적용
+  // 이미 애니메이션이 작동 중이면 중복 실행하지 않음 (재생 중 멈춤 해결)
+  if (el.classList.contains('scrolling')) return;
+
+  // 부모 요소보다 글자가 길 때만 적용
   if (el.scrollWidth > el.parentElement.offsetWidth) {
     el.classList.add('scrolling');
   }
 }
-
 function updateInfo() {
   if (!ytReady || !ytPlayer.getVideoData) return;
   try {
     const d = ytPlayer.getVideoData();
     if (!d || !d.title) return;
 
-    // ★ 곡이 바뀌었을 때만 슬라이드 애니메이션 실행
     if (d.video_id !== lastVideoId) {
+      lastVideoId = d.video_id;
+      
+      const titleEl = document.getElementById('npTitle');
+      const artistEl = document.getElementById('npArtist');
+
+      // 기존 애니메이션 클래스 제거 (초기화)
+      titleEl.classList.remove('scrolling');
+      artistEl.classList.remove('scrolling');
+
+      titleEl.textContent = d.title;
+      artistEl.textContent = d.author || "Unknown Artist";
+      document.getElementById('npAlbum').textContent = "Music Library";
+
+      // 텍스트가 렌더링된 후 전광판 적용 여부 판단
+      setTimeout(() => {
+        applyMarquee('npTitle');
+        applyMarquee('npArtist');
+      }, 200);
+
+      // 슬라이드 인 애니메이션 (기존 로직)
       const npBody = document.querySelector('.np-body');
       npBody.classList.remove('np-animate');
-      void npBody.offsetWidth; // 리플로우 강제 트리거 (애니메이션 재시작용)
+      void npBody.offsetWidth;
       npBody.classList.add('np-animate');
-      lastVideoId = d.video_id;
     }
-
-    // 1. 제목 및 가수 설정
-    document.getElementById('npTitle').textContent = d.title;
-    document.getElementById('npArtist').textContent = d.author || "Unknown Artist";
     
-    // 2. 앨범 정보 (YouTube API 특성상 'YouTube Music' 등으로 표시)
-    document.getElementById('npAlbum').textContent = "Music Library"; 
-
-    // ★ 텍스트 삽입 후 전광판 효과 체크 (약간의 지연 필요)
-    setTimeout(() => {
-      applyMarquee('npTitle');
-      applyMarquee('npArtist');
-    }, 100);
-
-    // 3. 곡 순서 업데이트 (X of Y)
+    // 곡 순서 등은 매번 업데이트해도 무방
     const idx = ytPlayer.getPlaylistIndex();
     const playlist = ytPlayer.getPlaylist();
     if (idx >= 0 && playlist) {
       document.getElementById('npSeq').textContent = `${idx + 1} of ${playlist.length}`;
-      updateTrackCardTitle(idx, d.title);
-      if (d.video_id) setCardThumb(idx, d.video_id);
     }
-    
-    if (d.video_id) setNPThumb(d.video_id);
   } catch (_) {}
 }
 
