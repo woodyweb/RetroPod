@@ -54,6 +54,17 @@ html,body{
   font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; /* 아이팟 스타일 폰트 */
   font-size:11px;
 }
+.lcd-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* 2px 간격의 미세한 가로줄 무늬 그라데이션 */
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%);
+  background-size: 100% 2px;
+  z-index: 99;         /* 모든 콘텐츠 위에 위치 */
+  pointer-events: none; /* 클릭 방해 금지 */
+  opacity: 0.6;        /* 선명도 조절 */
+}
 .lcd-wrap::after{
   content:'';position:absolute;top:0;left:0;right:0;height:35%;
   background:linear-gradient(180deg,rgba(255,255,255,.18) 0%,transparent 100%);
@@ -149,6 +160,27 @@ html,body{
   transition:opacity .4s ease;
 }
 .np-art-shine{display:none;}
+
+/* 전광판 애니메이션 */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(0); } /* 시작 지점 잠시 대기 */
+  80% { transform: translateX(-100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* 흐르는 텍스트를 위한 컨테이너 설정 */
+.marquee-container {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.scrolling {
+  display: inline-block;
+  padding-right: 50px; /* 루프 시 간격 확보 */
+  animation: marquee 10s linear infinite alternate;
+}
 
 /* 슬라이드 애니메이션 정의 */
 @keyframes slideInRight {
@@ -1546,6 +1578,17 @@ function startTimers(){
 }
 function stopTimers(){clearInterval(infoTimer);clearInterval(progTimer);}
 
+function applyMarquee(elementId) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  
+  el.classList.remove('scrolling'); // 초기화
+  // 텍스트가 넘칠 때만 애니메이션 적용
+  if (el.scrollWidth > el.parentElement.offsetWidth) {
+    el.classList.add('scrolling');
+  }
+}
+
 function updateInfo() {
   if (!ytReady || !ytPlayer.getVideoData) return;
   try {
@@ -1567,6 +1610,12 @@ function updateInfo() {
     
     // 2. 앨범 정보 (YouTube API 특성상 'YouTube Music' 등으로 표시)
     document.getElementById('npAlbum').textContent = "Music Library"; 
+
+    // ★ 텍스트 삽입 후 전광판 효과 체크 (약간의 지연 필요)
+    setTimeout(() => {
+      applyMarquee('npTitle');
+      applyMarquee('npArtist');
+    }, 100);
 
     // 3. 곡 순서 업데이트 (X of Y)
     const idx = ytPlayer.getPlaylistIndex();
