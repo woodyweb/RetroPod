@@ -153,6 +153,24 @@ html,body{
 }
 .np-art-shine{display:none;}
 
+/* Now Playing 전용 메타 아이콘 (셔플, 반복) */
+.np-meta-icons {
+  position: absolute;
+  top: 2px;            /* 헤더 바로 아래 */
+  right: 10px;         /* 배터리 위치와 정렬 */
+  display: flex;
+  gap: 4px;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.meta-icon {
+  font-size: 11px;     /* 가독성 있는 크기 */
+  color: #555;
+  font-weight: bold;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+}	
+
 /* 전광판 애니메이션 */
 @keyframes marquee {
   0% { transform: translateX(0); }
@@ -1095,20 +1113,25 @@ uNxuNxv+S5iTfI+J1Gy3om5iTfI+J1Gy3om5iTfI+P/Z" transform="matrix(0.24 0 0 0.24 18
 <div class="lcd-overlay">
 <div class="lcd-wrap">
       <div class="lcd-header">
-        <span class="h-icon" id="hLeft">&nbsp;</span>
-        <span class="h-title" id="hTitle">Now Playing</span>
-        <div class="header-right-zone">
-            <span class="h-icon" id="hRight">&#9654;</span>
-            <div class="batt" id="battIndicator">
-                <div class="batt-body">
-                    <div class="batt-fill" id="realBattFill"></div>
-                    <div class="batt-icon" id="battIcon"></div>
-                </div>
-                <div class="batt-nub"></div>
-            </div>
-        </div>
+          <span class="h-icon" id="hLeft">&nbsp;</span>
+          <span class="h-title" id="hTitle">Now Playing</span>
+          <div class="header-right-zone">
+              <span class="h-icon" id="hRight">&#9654;</span>
+              <div class="batt" id="battIndicator">
+                  <div class="batt-body">
+                      <div class="batt-fill" id="realBattFill"></div>
+                      <div class="batt-icon" id="battIcon"></div>
+                  </div>
+                  <div class="batt-nub"></div>
+              </div>
+          </div>
       </div>
+	
       <div class="lcd-view" id="view-nowplaying">
+          <div class="np-meta-icons">
+              <div id="shuffleStatus" class="meta-icon" style="display: none;">⇄</div>
+              <div id="repeatStatus" class="meta-icon" style="display: none;">↻</div>
+      </div>
         <div class="np-body">
           <div class="np-art" id="npArt">
             <div class="np-art-main" id="npArtMain">
@@ -1208,6 +1231,27 @@ function updateBatteryStatus() {
     battery.addEventListener('levelchange', refresh);
     battery.addEventListener('chargingchange', refresh);
   });
+}
+
+function toggleShuffle() {
+  if (!ytReady) return;
+  isShuffle = !isShuffle;
+  
+  // YouTube API 설정
+  ytPlayer.setShuffle(isShuffle);
+  
+  // UI 업데이트 (내용 영역의 아이콘 표시/숨김)
+  const icon = document.getElementById('shuffleStatus');
+  if (icon) {
+    icon.style.display = isShuffle ? 'block' : 'none';
+  }
+  
+  // 셔플 활성화 시 시각적 피드백
+  if (isShuffle) {
+    console.log("Shuffle Enabled");
+    // 곡을 넘겨서 섞였음을 확인시켜줌 (디자이너 선택 사항)
+    // ytPlayer.nextVideo(); 
+  }
 }
 
 // 색상
