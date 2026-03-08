@@ -1501,15 +1501,6 @@ function updateNPArt(idx){
     }
   }
 
-    if(Math.abs(accumDeg) >= THRESHOLD){
-      const dir = accumDeg > 0 ? 1 : -1;
-      onWheelTurn(dir);
-      accumDeg = 0;
-      // 볼륨이 조절되었다면 확실히 클릭을 막음
-      wheelDragged = true; 
-    }
-  }
-
   function onEnd(x, y){
     // ★ 드래그 가드가 세워지지 않았을 때만 버튼 기능을 실행합니다.
     if(!wheelDragged) {
