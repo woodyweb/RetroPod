@@ -1458,13 +1458,15 @@ function showAbout(){
   let ids=[]; try{ ids=ytPlayer.getPlaylist()||[]; }catch(_){}
   const tc = ids.length || tracks.length || 0;
   document.getElementById('aboutContent').innerHTML = `
-    Playlist: ${PLAYLIST_ID.substring(0,10)}...<br>
-    Tracks: ${tc}<br>
-    Language: ${lang}<br>
+    <b>Wooseok Suh</b><br>
+    Web Developer<br>
     <br>
-    Built with YouTube IFrame API<br>
-    UI inspired by iPod Classic
-  `;
+    🌐 sites.google.com/view/wooseoksuh/about<br>
+    💼 linkedin.com/in/wooseok-suh-woody<br>
+    📧 wooseok.woody@gmail.com<br>
+  <br>
+  Tracks: ${trackCount}
+`;
 }
 
 function showView(name){
@@ -1770,8 +1772,8 @@ function onCenter(){
 function onMenu(){
   if(navigator.vibrate) navigator.vibrate(6);
   if(appState==='nowplaying'||appState==='tracklist'){
-    menuStack=[{menuId:'main',selIdx:0}];
-    openMenu('main',0);
+    menuStack=[{menuId:'main',selIdx:0},{menuId:'music',selIdx:0}];
+    openMenu('music',0);
   } else if(appState==='menu'||appState==='about'){
     menuBack();
   }
