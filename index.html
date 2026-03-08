@@ -1456,7 +1456,9 @@ function updateNPArt(idx){
   const wheelEl = document.getElementById('wheelShell');
   let lastAngle = null;
   let accumDeg  = 0;
-  const THRESHOLD = 12; // degrees per tick
+  let startX = 0, startY = 0;        // ← 추가
+  const THRESHOLD = 18; // degrees per tick
+  const DRAG_PX = 8;   
 
   function getAngle(x, y){
     const r  = wheelEl.getBoundingClientRect();
@@ -1475,22 +1477,29 @@ function updateNPArt(idx){
   function onStart(x, y){
     lastAngle  = getAngle(x, y);
     accumDeg   = 0;
+    startX = x; startY = y;  
     wheelDragged = false; // 시작 시 초기화
   }
 
   function onMove(x, y){
     if(lastAngle === null) return;
+	  
+    // 최소 픽셀 이동 없으면 drag 무시
+    const moved = Math.hypot(x - startX, y - startY);
+    if(moved < DRAG_PX) return;      // ← 추가
+	  
     let diff = getAngle(x, y) - lastAngle;
     if(diff >  180) diff -= 360;
     if(diff < -180) diff += 360;
-    
-    // ★ 핵심 수정: 아주 미세한 움직임(2도 이상)만 있어도 클릭 방지 가드를 세웁니다.
-    if(Math.abs(diff) > 2) {
-      wheelDragged = true;
-    }
-
     accumDeg += diff;
     lastAngle = getAngle(x, y);
+    if(Math.abs(accumDeg) >= THRESHOLD){
+      const dir = accumDeg > 0 ? 1 : -1;
+      onWheelTurn(dir);
+      accumDeg = 0;
+      wheelDragged = true;
+    }
+  }
 
     if(Math.abs(accumDeg) >= THRESHOLD){
       const dir = accumDeg > 0 ? 1 : -1;
