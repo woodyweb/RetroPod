@@ -263,7 +263,9 @@ html,body{
   right: 0;
   
   /* 레이어 우선순위 */
-  z-index: 50;       /* 썸네일 반사 효과보다 위에 오도록 설정 */
+  z-index: 999;
+  transform: translateZ(100px); 
+  -webkit-transform: translateZ(100px);
 }
 
 /* 재생 바 시간 숫자: 블랙 */
@@ -283,9 +285,10 @@ html,body{
   background: #e0e0e0;
   border: 1px solid #bcbcbc;
   position: relative;
-  overflow: visible; /* 반사 효과 노출을 위해 */
-  /* 재생 바 하단 미러(반사) 효과 */
+  overflow: visible;
+  
   -webkit-box-reflect: below 1px linear-gradient(transparent, rgba(255,255,255,0.3));
+  transform: translateZ(0); 
 }
 
 /* 파란색 진행 바 그라데이션 */
@@ -294,6 +297,7 @@ html,body{
   /* 실제 아이팟 클래식의 파란색 그라데이션 반영 */
   background: linear-gradient(180deg, #6eb4f7 0%, #1a82f0 50%, #005bc5 100%);
   width: 0%;
+  will-change: width;
 }
 
 /* 트랙 캐러셀 */
