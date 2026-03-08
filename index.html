@@ -167,11 +167,15 @@ html,body{
 }
 
 .meta-icon {
-  font-size: 11px;     /* 가독성 있는 크기 */
+  width: 16px;
+  height: 16px;
   color: #555;
-  font-weight: bold;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.8);
-}	
+}
+.meta-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
 
 /* 전광판 애니메이션 */
 @keyframes marquee {
@@ -1131,8 +1135,12 @@ uNxuNxv+S5iTfI+J1Gy3om5iTfI+J1Gy3om5iTfI+P/Z" transform="matrix(0.24 0 0 0.24 18
 	
       <div class="lcd-view" id="view-nowplaying">
           <div class="np-meta-icons">
-              <div id="shuffleStatus" class="meta-icon" style="display: none;">⇄</div>
-              <div id="repeatStatus" class="meta-icon" style="display: none;">↻</div>
+              <div id="shuffleStatus" class="meta-icon" style="display: none;">
+                <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path d="M811.8 576.2c-5.2-5.2-12.4-8.2-19.8-8.2s-14.4 2.8-19.8 8.2c-5.4 5.2-8.2 12.4-8.2 19.8s3 14.4 8.2 19.8l32.6 32.4h-151l-248-310-0.2-0.2c-5.2-6.2-13.4-10-21.6-10H156c-15.4 0-28 12.6-28 28s12.6 28 28 28h214.8l105 132-105 132H156c-15.4 0-28 12.6-28 28s12.6 28 28 28h228c8.2 0 16-3.6 21.4-10l0.2-0.2 106.4-133.6 106.4 133.6 0.2 0.2c5.4 6.4 13.2 10 21.4 10h168.8l-32.6 32.4c-5.4 5.2-8.2 12.2-8.2 19.8 0 7.4 3 14.4 8.2 19.8 5.2 5.2 12.4 8.2 19.8 8.2s14.4-2.8 19.8-8.2l67.2-66.8c8.4-8.2 13-19.2 13-31s-4.6-22.8-13-31l-71.2-71z"/><path d="M558.8 470.8c2.2 2.8 5.6 4.2 9.2 4.2h0.2c3.6 0 7-1.6 9.2-4.4l75.8-94.6h151.6l-32.6 32.4c-5.4 5.2-8.2 12.2-8.2 19.8 0 7.4 3 14.4 8.2 19.8 5.2 5.2 12.4 8.2 19.8 8.2s14.4-2.8 19.8-8.2l71.2-70.8c8.4-8.2 13-19.4 13-31 0-11.8-4.6-22.8-13-31l-67.2-66.8c-5.2-5.2-12.4-8.2-19.8-8.2s-14.4 2.8-19.8 8.2c-5.4 5.2-8.2 12.4-8.2 19.8s3 14.4 8.2 19.8l32.6 32.4H640c-8.2 0-16 3.6-21.4 10l-0.2 0.2-80.6 100.4c-3.6 4.4-3.6 10.8 0.2 15.2l20.8 24.6z"/></svg>
+              </div>
+              <div id="repeatStatus" class="meta-icon" style="display: none;">
+                <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path d="M673.2 315L606 248.2c-7-7-17-9.8-27.2-7.2-2.4 0.6-4.8 1.6-7 3-9.4 5.8-14.4 15.6-13.6 26.2 0.4 6.8 3.8 13.2 8.6 18.2l32 31.8H284c-41.6 0-80.6 16.2-110.2 45.8C144.2 395.4 128 434.4 128 476v32c0 15.4 12.6 28 28 28s28-12.6 28-28v-32c0-26.6 10.4-51.6 29.4-70.6 19-19 44-29.4 70.6-29.4h310.8l-32 31.8c-4.8 4.8-8 10.8-8.6 17.4-0.8 8.4 2.2 16.6 8.2 22.6 5.2 5.2 12.4 8.2 19.8 8.2s14.4-2.8 19.8-8.2l71.2-70.8c8.4-8.2 13-19.4 13-31-0.2-11.8-4.8-22.8-13-31zM868 488c-15.4 0-28 12.6-28 28v32c0 26.6-10.4 51.6-29.4 70.6-19 19-44 29.4-70.6 29.4H429.2l32-31.8c4.8-4.8 8-10.8 8.6-17.6 0.8-8.4-2.2-16.6-8.2-22.6-5.2-5.2-12.4-8.2-19.8-8.2s-14.4 2.8-19.8 8.2l-71.2 70.8c-8.4 8.2-13 19.4-13 31 0 11.8 4.6 22.8 13 31l67.2 66.8c7 7 17 9.8 27.2 7.2 2.4-0.6 4.8-1.6 7-3 9.4-5.8 14.4-15.6 13.6-26.2-0.4-6.8-3.8-13.2-8.6-18.2l-32-31.8H740c86 0 156-70 156-156v-32c0-15-12.6-27.6-28-27.6z"/></svg>
+              </div>
       </div>
         <div class="np-body">
           <div class="np-art" id="npArt">
@@ -1448,8 +1456,8 @@ function updateNPArt(idx){
   let lastAngle = null;
   let accumDeg  = 0;
   let startX = 0, startY = 0;
-  const THRESHOLD = 12; // degrees per tick
-  const DRAG_PX   = 10; // 픽셀 이상 이동해야 drag로 판정
+  const THRESHOLD = 12;
+  const DRAG_PX   = 10;
 
   function getAngle(x, y){
     const r  = wheelEl.getBoundingClientRect();
@@ -1469,7 +1477,6 @@ function updateNPArt(idx){
   function onMove(x, y){
     if(lastAngle === null) return;
 
-    // 픽셀 기반 drag 판정 — 손가락을 올려놓는 것만으로는 차단되지 않음
     if(Math.hypot(x - startX, y - startY) >= DRAG_PX){
       wheelDragged = true;
     }
@@ -1489,11 +1496,10 @@ function updateNPArt(idx){
   }
 
   function onEnd(x, y){
-    // ★ 드래그 가드가 세워지지 않았을 때만 버튼 기능을 실행합니다.
     if(!wheelDragged) {
       fireZone(x, y);
     }
-    lastAngle  = null;
+    lastAngle = null;
   }
 
   // Mouse
