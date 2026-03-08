@@ -1540,6 +1540,7 @@ function renderAbout(){
     }
     const hint = item.action === 'copy' ? '<span style="font-size:9px;opacity:.6">tap to copy</span>' : '<span style="font-size:9px;opacity:.6">tap to open</span>';
     li.innerHTML = `<span>${item.label}</span>${hint}`;
+    li.id = 'about-item-' + i;
     li.addEventListener('click', () => { aboutSelIdx = i; aboutSelect(); });
     list.appendChild(li);
   });
@@ -1552,14 +1553,16 @@ function aboutSelect(){
     window.open(item.value, '_blank');
   } else if(item.action === 'copy'){
     navigator.clipboard.writeText(item.value).then(() => {
-      // 복사 완료 피드백
-      const list = document.getElementById('aboutContent');
-      const els = list.querySelectorAll('div');
-      const target = els[aboutSelIdx + 1]; // +1 for header
+      const target = document.getElementById('about-item-' + aboutSelIdx);
       if(target){
-        const orig = target.innerHTML;
+        const origBg = target.style.background;
+        const origColor = target.style.color;
         target.innerHTML = `<span>📧 Email</span><span style="font-size:9px;color:#4caf50;font-weight:bold;">Copied!</span>`;
-        setTimeout(() => { target.innerHTML = orig; }, 1500);
+        setTimeout(() => {
+          target.innerHTML = `<span>📧 Email</span><span style="font-size:9px;opacity:.6">tap to copy</span>`;
+          target.style.background = origBg;
+          target.style.color = origColor;
+        }, 1500);
       }
     }).catch(() => {
       prompt('이메일 주소:', item.value);
