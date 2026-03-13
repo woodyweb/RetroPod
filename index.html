@@ -1761,7 +1761,7 @@ function updateNPArt(idx){
   let lastAngle = null;
   let accumDeg  = 0;
   let startX = 0, startY = 0;
-  const THRESHOLD = 12;
+  const THRESHOLD = 22;
   const DRAG_PX   = 10;
 
   function getAngle(x, y){
@@ -1854,11 +1854,11 @@ function onWheelTurn(dir){
     const stackTop = menuStack[menuStack.length-1];
     const menu = MENUS[stackTop.menuId];
     const n = menu.items.length;
-    menuSelIdx = Math.max(0, Math.min(n-1, menuSelIdx+dir));
+    menuSelIdx = ((menuSelIdx+dir)%n+n)%n;
     renderMenu(stackTop.menuId);
   } else if(appState==='about'){
     const n = ABOUT_ITEMS.length;
-    aboutSelIdx = Math.max(0, Math.min(n-1, aboutSelIdx+dir));
+    aboutSelIdx = ((aboutSelIdx+dir)%n+n)%n;
     renderAbout();
   } else if(appState==='tracklist'){
     spinCarousel(dir);
